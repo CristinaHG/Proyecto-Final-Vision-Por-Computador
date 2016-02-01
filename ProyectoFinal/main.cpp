@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include<opencv2/opencv.hpp>
 #include<opencv2/imgcodecs.hpp>
+#include "functions.h"
 
 using namespace std;
 using namespace cv;
@@ -42,7 +43,7 @@ int main(int argc, char** argv) {
     const Point* polygons[1] = { poly[0] };
     int num_points[] = { 16 };
     
-    fillPoly(mascara, polygons, num_points, 1, Scalar(255,255,255));
+    fillPoly(mask, polygons, num_points, 1, Scalar(255,255,255));
     
     Point center(750,496);
     
@@ -54,6 +55,9 @@ int main(int argc, char** argv) {
     waitKey(0);
     imshow("mixed seamless cloning", output2);
     waitKey(0);
+    
+    getRGBMatrix(im1);
+
     return 0;
 }
 
