@@ -14,7 +14,7 @@
 using namespace std; 
 using namespace cv; 
 
-vector<Mat> getRGBMatrix(Mat image);
-
+void getRGBMatrix(Mat image,vector<Mat>& channels);
+Mat solVector(Mat source,Mat dest,Mat mask);
 #endif	/* FUNCTIONS_H */
 
