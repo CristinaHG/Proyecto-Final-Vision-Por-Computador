@@ -149,32 +149,6 @@ Mat seamlessClonningNormal(Mat source, Mat dest,Mat mask){
 
 //////////////////////////////////////////////////////////////////////
 
-//function resultImg = reconstructImg(red, green, blue, mask, destination, indexes)
-//
-//[destinationR destinationG destinationB] = getRGB(destination);
-//[destinationW destinationH channels] = size(destination);
-//
-//newR = destinationR;
-//newG = destinationG;
-//newB = destinationB;
-//
-//[maskW maskH c] = size(mask);
-//
-//for x = 1:maskW
-//    for y = 1:maskH
-//        if mask(x, y) ~= 0
-//            index = indexes(x, y);
-//            newR(x, y) = red(index);
-//            newG(x, y) = green(index);
-//            newB(x, y) = blue(index);
-//        end
-//    end
-//end
-//
-//resultImg = buildImg(newR, newG, newB);
-//    
-//end
-
 cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::Mat &dest, cv::Mat &indexes){
     vector<cv::Mat> destChannels;
     
@@ -203,5 +177,14 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
             }
         }
     }
-//    TODO: buildImg
+    cv::Mat_<uchar> assembledImage;
+    vector<cv::Mat> mv;
+    
+    mv.push_back(newR);
+    mv.push_back(newG);
+    mv.push_back(newB);
+    
+    cv::merge(mv, assembledImage);
+    
+    return assembledImage;
 }
