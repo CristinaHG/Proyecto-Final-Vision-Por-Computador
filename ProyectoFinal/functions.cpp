@@ -94,6 +94,24 @@ int guidanceVect(Mat sourceChannel,float x,float y){
     return total;
 }
 
+Mat CoefficientMatrix(Mat souce,Mat dest, Mat mask,Mat index){
+
+    int insidePix=0;
+    int n=0;
+    
+    for(int i=0;i<mask.rows; i++){
+        for(int j=0; j<mask.cols;j++){
+            if(mask.at<uchar>(i,j)==1) // 0 
+                n++;
+        }
+    }
+    Mat coeffMatrix=Mat::zeros(n,n,CV_8UC3);
+    
+    }
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////
 
