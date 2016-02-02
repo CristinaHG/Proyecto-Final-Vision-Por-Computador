@@ -132,7 +132,18 @@ Mat CoefficientMatrix(Mat source,Mat dest, Mat mask,Mat index){
     return coeffMatrix;
 }
 
+Mat seamlessClonningNormal(Mat source, Mat dest,Mat mask){
 
+    int insidePix=0;
+    
+    for(int i=0; i<mask.rows;i++){
+        for(int j=0; j<mask.cols; j++){
+            if(mask.at<uchar>(i,j)==1)
+                insidePix++;
+        }
+    }
+
+}
 
 
 
