@@ -149,6 +149,13 @@ Mat seamlessClonningNormal(Mat source, Mat dest,Mat mask){
     
     indexes=getIndexes(mask,dest.cols,dest.rows);
     
+    Mat coeffMat;
+    coeffMat=CoefficientMatrix(source,dest,mask,indexes);
+    Mat solutionVector;
+    solutionVector=solVector(source,dest,mask);
+    
+    
+    
 }
 
 
