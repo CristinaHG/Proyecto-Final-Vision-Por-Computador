@@ -5,8 +5,6 @@
  * Created on 01 February 2016, 16:01
  */
 
-
-
 #include <vector>
 #include "functions.h"
 #include <math.h> 
@@ -70,13 +68,6 @@ Mat solVector(Mat source, Mat dest, Mat mask) {
                 solutionV.at<uchar>(2, internalPix) += rgbDest.at(1).at<uchar>(i, j + 1);
                 solutionV.at<uchar>(3, internalPix) += rgbDest.at(2).at<uchar>(i, j + 1);
             }
-
         }
-
     }
-
-
-
-
-
 }
