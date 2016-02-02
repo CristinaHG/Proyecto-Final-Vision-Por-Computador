@@ -143,9 +143,12 @@ Mat seamlessClonningNormal(Mat source, Mat dest,Mat mask){
                 insidePix++;
         }
     }
-    
+    Mat indexes;
     getRGBMatrix(source,SourceChannels);
     getRGBMatrix(dest,DestChannels);
+    
+    indexes=getIndexes(mask,dest.cols,dest.rows);
+    
 }
 
 
