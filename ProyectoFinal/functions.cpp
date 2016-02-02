@@ -141,4 +141,33 @@ Mat CoefficientMatrix(Mat souce,Mat dest, Mat mask,Mat index){
 //    
 //end
 
-cv::Mat reconstructImage(cv::Mat&,)
+cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::Mat &dest, cv::Mat &indexes){
+    vector<cv::Mat> destChannels;
+    
+    cv::split(dest, destChannels);
+    
+    int destRows = dest.rows; 
+    int destCols = dest.cols;
+    int destCh = dest.channels();
+    int maskRows = mask.rows; 
+    int maskCols = mask.cols;
+    int maskCh = mask.channels();
+    
+    cv::Mat newR, newG, newB;
+    
+    destChannels.at(0).copyTo(newR);
+    destChannels.at(1).copyTo(newG);
+    destChannels.at(2).copyTo(newB);
+    
+    for (int i = 0; i < mask.cols; i++) {
+        for (int k = 0; k < mask.rows; k++) {
+            if (mask.at<uchar>(i,k) != 0){
+                int index = indexes.at<int>(i, k);
+                newR.at(i, k) = r.at<uchar>(index);
+                newG.at(i, k) = g.at<uchar>(index);
+                newB.at(i, k) = b.at<uchar>(index);
+            }
+        }
+    }
+//    TODO: buildImg
+}

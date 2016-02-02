@@ -20,5 +20,6 @@ Mat solVector(Mat &source,Mat &dest,Mat &mask);
 int guidanceVect(Mat &sourceChannel,float x,float y);
 Mat CoefficientMatrix(Mat &souce,Mat &dest, Mat &mask,Mat &index);
 //---------------------------
+cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::Mat &dest, cv::Mat &indexes);
 #endif	/* FUNCTIONS_H */
 
