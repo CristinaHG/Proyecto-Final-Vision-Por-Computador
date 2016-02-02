@@ -135,15 +135,19 @@ Mat CoefficientMatrix(Mat source,Mat dest, Mat mask,Mat index){
 Mat seamlessClonningNormal(Mat source, Mat dest,Mat mask){
 
     int insidePix=0;
-    
+    vector<Mat> DestChannels;
+    vector<Mat> SourceChannels;
     for(int i=0; i<mask.rows;i++){
         for(int j=0; j<mask.cols; j++){
             if(mask.at<uchar>(i,j)==1)
                 insidePix++;
         }
     }
-
+    
+    getRGBMatrix(source,SourceChannels);
+    getRGBMatrix(dest,DestChannels);
 }
+
 
 
 
