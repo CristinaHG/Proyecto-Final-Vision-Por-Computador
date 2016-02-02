@@ -16,5 +16,6 @@ using namespace cv;
 
 void getRGBMatrix(Mat image,vector<Mat>& channels);
 Mat solVector(Mat source,Mat dest,Mat mask);
+int guidanceVect(Mat sourceChannel,float x,float y);
 #endif	/* FUNCTIONS_H */
 

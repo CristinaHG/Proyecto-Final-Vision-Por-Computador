@@ -41,6 +41,7 @@ Mat solVector(Mat source,Mat dest,Mat mask){
     getRGBMatrix(source,rgbSource);
 
     int internalPix=0;
+    int sumNred, sumNblue, sumNgreen;
     
     for(int i=1;i<source.rows-1;i++ ){
         for(int j=1;i<source.cols-1;j++){
@@ -71,12 +72,26 @@ Mat solVector(Mat source,Mat dest,Mat mask){
                 solutionV.at<uchar>(3,internalPix)+=rgbDest.at(2).at(i,j+1);
             }
             
+            sumNred=guidanceVect(rgbSource.at(0),i,j);
+            sumNblue=guidanceVect(rgbSource.at(1),i,j);
+            sumNgreen=guidanceVect(rgbSource.at(2),i,j);
         }
     
+        solutionV.at<uchar>(0,internalPix)+=sumNred;
+        solutionV.at<uchar>(1,internalPix)+=sumNblue;
+        solutionV.at<uchar>(2,internalPix)+=sumNgreen;
+        
+        return solutionV;
     }
+}
 
-    
+int guidanceVect(Mat sourceChannel,float x,float y){
+    int total=0;
+    float n1=sourceChannel(x,y)-sourceChannel(x-1,y);
+    float n2=sourceChannel(x,y)-sourceChannel(x+1,y);
+    float n3=sourceChannel(x,y)-sourceChannel(x,y-1);
+    float n4=sourceChannel(x,y)-sourceChannel(x,y+1);
 
-
-
+    total=n1+n2+n3+n4;
+    return total;
 }

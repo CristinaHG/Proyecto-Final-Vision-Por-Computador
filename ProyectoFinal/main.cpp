@@ -56,7 +56,8 @@ int main(int argc, char** argv) {
     imshow("mixed seamless cloning", output2);
     waitKey(0);
     
-    getRGBMatrix(im1);
+    vector<Mat> channelsVect;
+    getRGBMatrix(im1,channelsVect);
 
     return 0;
 }
