@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs.hpp>
-//#include "functions.h"
+#include "functions.h"
 
 using namespace std;
 

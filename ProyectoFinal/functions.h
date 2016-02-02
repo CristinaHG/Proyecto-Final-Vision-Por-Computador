@@ -11,10 +11,10 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs.hpp>
 
-using namespace std; 
-using namespace cv; 
+using namespace std;
+using namespace cv;
 
-void getRGBMatrix(Mat image,vector<Mat>& channels);
-Mat solVector(Mat source,Mat dest,Mat mask);
+void getRGBMatrix(Mat image, vector<Mat>& channels);
+Mat solVector(Mat source, Mat dest, Mat mask);
 #endif	/* FUNCTIONS_H */
 
