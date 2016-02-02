@@ -154,8 +154,16 @@ Mat seamlessClonningNormal(Mat source, Mat dest,Mat mask){
     Mat solutionVector;
     solutionVector=solVector(source,dest,mask);
     
+    vector<Mat> solrgb;
     
+    solrgb.push_back(coeffMat/solutionVector.row(0));
+    solrgb.push_back(coeffMat/solutionVector.row(1));
+    solrgb.push_back(coeffMat/solutionVector.row(2));
     
+    Mat result;
+    result=reconstructImage( solrgb.at(0), solrgb.at(1), solrgb.at(2),mask,dest,indexes);
+
+    return result;
 }
 
 
