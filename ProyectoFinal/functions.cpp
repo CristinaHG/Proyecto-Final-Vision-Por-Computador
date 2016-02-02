@@ -93,3 +93,34 @@ int guidanceVect(Mat sourceChannel,float x,float y){
     total=n1+n2+n3+n4;
     return total;
 }
+
+
+//////////////////////////////////////////////////////////////////////
+
+//function resultImg = reconstructImg(red, green, blue, mask, destination, indexes)
+//
+//[destinationR destinationG destinationB] = getRGB(destination);
+//[destinationW destinationH channels] = size(destination);
+//
+//newR = destinationR;
+//newG = destinationG;
+//newB = destinationB;
+//
+//[maskW maskH c] = size(mask);
+//
+//for x = 1:maskW
+//    for y = 1:maskH
+//        if mask(x, y) ~= 0
+//            index = indexes(x, y);
+//            newR(x, y) = red(index);
+//            newG(x, y) = green(index);
+//            newB(x, y) = blue(index);
+//        end
+//    end
+//end
+//
+//resultImg = buildImg(newR, newG, newB);
+//    
+//end
+
+cv::Mat reconstructImage(cv::Mat &)
