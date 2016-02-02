@@ -10,7 +10,7 @@
 #include <math.h> 
 #include <opencv2/imgproc.hpp>
 
-void getRGBMatrix(Mat image, vector<Mat>& channels) {
+void getRGBMatrix(Mat &image, vector<Mat> &channels) {
 
     cv::split(image, channels);
 
@@ -21,7 +21,7 @@ void getRGBMatrix(Mat image, vector<Mat>& channels) {
     //    return channels;
 }
 
-Mat solVector(Mat source, Mat dest, Mat mask) {
+Mat solVector(Mat &source, Mat &dest, Mat &mask) {
 
     int ncol = 0;
     for (int i = 0; i < mask.rows; i++) {
@@ -83,7 +83,7 @@ Mat solVector(Mat source, Mat dest, Mat mask) {
     }
 }
 
-int guidanceVect(Mat sourceChannel,float x,float y){
+int guidanceVect(Mat &sourceChannel,float x,float y){
     int total=0;
     float n1=sourceChannel(x,y)-sourceChannel(x-1,y);
     float n2=sourceChannel(x,y)-sourceChannel(x+1,y);
@@ -123,4 +123,4 @@ int guidanceVect(Mat sourceChannel,float x,float y){
 //    
 //end
 
-cv::Mat reconstructImage(cv::Mat &)
+cv::Mat reconstructImage(cv::Mat&,)
