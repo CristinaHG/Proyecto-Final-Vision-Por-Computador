@@ -94,7 +94,7 @@ int guidanceVect(Mat &sourceChannel,float x,float y){
     return total;
 }
 
-Mat CoefficientMatrix(Mat souce,Mat dest, Mat mask,Mat index){
+Mat CoefficientMatrix(Mat source,Mat dest, Mat mask,Mat index){
 
     int insidePix=0;
     int n=0;
@@ -107,7 +107,30 @@ Mat CoefficientMatrix(Mat souce,Mat dest, Mat mask,Mat index){
     }
     Mat coeffMatrix=Mat::zeros(n,n,CV_8UC3);
     
+    for(int i=1; i<source.rows-1;i++){
+        for(int j=1; j<source.cols-1;j++){
+            if(mask.at<uchar>(i,j)!=0){
+                insidePix+=1;
+            
+            }else if(mask.at<uchar>(i-1,j)!=0){
+                coeffMatrix.at<uchar>(i-1,j)=-1;
+            
+            }else if(mask.at<uchar>(i,j-1)!=0){
+                coeffMatrix.at<uchar>(i,j-1)=-1;
+                
+            }else if(mask.at<uchar>(i+1,j)!=0){
+                coeffMatrix.at<uchar>(i+1,j)=-1;
+            
+            }else if (mask.at<uchar>(i,j+1)!=0){
+                coeffMatrix.at<uchar>(i,j+1)=-1;
+            
+            }else{
+            coeffMatrix.at<uchar>(insidePix,insidePix)=4;
+            }       
+        }
     }
+    return coeffMatrix;
+}
 
 
 

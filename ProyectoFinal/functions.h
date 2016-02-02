@@ -18,7 +18,7 @@ using namespace cv;
 void getRGBMatrix(Mat &image,vector<Mat> &channels);
 Mat solVector(Mat &source,Mat &dest,Mat &mask);
 int guidanceVect(Mat &sourceChannel,float x,float y);
-Mat CoefficientMatrix(Mat &souce,Mat &dest, Mat &mask,Mat &index);
+Mat CoefficientMatrix(Mat &source,Mat &dest, Mat &mask,Mat &index);
 //---------------------------
 #endif	/* FUNCTIONS_H */
 
