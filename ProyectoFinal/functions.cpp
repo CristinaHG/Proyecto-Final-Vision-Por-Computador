@@ -96,7 +96,7 @@ int guidanceVect(cv::Mat &sourceChannel, float x, float y) {
     return total;
 }
 
-Mat CoefficientMatrix(cv::Mat source, cv::Mat dest, cv::Mat mask, cv::Mat index) {
+cv::Mat coefficientMatrix(cv::Mat source, cv::Mat dest, cv::Mat mask, cv::Mat index) {
 
     int insidePix = 0;
     int n = 0;

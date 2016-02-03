@@ -37,6 +37,9 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <commandLine>-Wall</commandLine>
+        </cTool>
         <ccTool>
           <incDir>
             <pElem>/usr/local/include</pElem>
