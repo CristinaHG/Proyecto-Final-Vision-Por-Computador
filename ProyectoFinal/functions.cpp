@@ -86,11 +86,10 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 int guidanceVect(cv::Mat &sourceChannel, float x, float y) {
     int total = 0;
 
-    // TODO: Call Mat with .at<>
-    float n1 = sourceChannel(x, y) - sourceChannel(x - 1, y);
-    float n2 = sourceChannel(x, y) - sourceChannel(x + 1, y);
-    float n3 = sourceChannel(x, y) - sourceChannel(x, y - 1);
-    float n4 = sourceChannel(x, y) - sourceChannel(x, y + 1);
+    float n1 = sourceChannel.at<float>(x, y) - sourceChannel.at<float>(x - 1, y);
+    float n2 = sourceChannel.at<float>(x, y) - sourceChannel.at<float>(x + 1, y);
+    float n3 = sourceChannel.at<float>(x, y) - sourceChannel.at<float>(x, y - 1);
+    float n4 = sourceChannel.at<float>(x, y) - sourceChannel.at<float>(x, y + 1);
 
     total = n1 + n2 + n3 + n4;
     return total;
@@ -153,7 +152,7 @@ cv::Mat seamlessClonningNormal(cv::Mat source, cv::Mat dest, cv::Mat mask) {
     indexes = getIndexes(mask, dest.cols, dest.rows);
 
     cv::Mat coeffMat;
-    coeffMat = CoefficientMatrix(source, dest, mask, indexes);
+    coeffMat = coefficientMatrix(source, dest, mask, indexes);
     cv::Mat solutionVector;
     solutionVector = solVector(source, dest, mask);
 
@@ -189,9 +188,9 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
         for (int k = 0; k < mask.rows; k++) {
             if (mask.at<uchar>(i, k) != 0) {
                 int index = indexes.at<int>(i, k);
-                newR.at(i, k) = r.at<uchar>(index);
-                newG.at(i, k) = g.at<uchar>(index);
-                newB.at(i, k) = b.at<uchar>(index);
+                newR.at<uchar>(i, k) = r.at<uchar>(index);
+                newG.at<uchar>(i, k) = g.at<uchar>(index);
+                newB.at<uchar>(i, k) = b.at<uchar>(index);
             }
         }
     }
@@ -208,6 +207,7 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
 }
 
 cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
+    
     cv::Mat indexes = cv::Mat::zeros(rows, cols, cv::CV_8UC1);
 
     int insiders = 0;
