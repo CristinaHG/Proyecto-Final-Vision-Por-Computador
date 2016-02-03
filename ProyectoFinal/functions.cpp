@@ -10,6 +10,13 @@
 #include <math.h> 
 #include <opencv2/imgproc.hpp>
 
+#define _DEBUG 1
+#if _DEBUG
+#define LOG_MESSAGE(x) std::cout << __FILE__ << " (" << __LINE__ << "): " << x << std::endl;
+#else
+#define LOG_MESSAGE(x)
+#endif
+
 cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
     int ncol = 0;
@@ -123,7 +130,7 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
     return coeffMatrix;
 }
 
-cv::Mat seamlessClonningNormal(cv::Mat source, cv::Mat dest, cv::Mat mask) {
+cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
     int insidePix = 0;
     vector<cv::Mat> DestChannels;

@@ -57,6 +57,8 @@ int main(int argc, char** argv) {
     cv::waitKey(0);
 
     vector<cv::Mat> channelsVect;
+    
+    seamlessClonningNormal(im2, im1, mask);
 
     return 0;
 }

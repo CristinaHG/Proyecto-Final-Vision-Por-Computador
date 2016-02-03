@@ -41,6 +41,15 @@ int guidanceVect(cv::Mat &sourceChannel, float x, float y);
  */
 cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index);
 
+/**
+ * 
+ * @param source
+ * @param dest
+ * @param mask
+ * @return 
+ */
+cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask);
+
 //---------------------------
 /**
  * 
