@@ -15,13 +15,6 @@ using namespace std;
 
 /**
  * 
- * @param image
- * @param channels
- */
-void getRGBMatrix(cv::Mat &image, vector<cv::Mat> &channels);
-
-/**
- * 
  * @param source
  * @param dest
  * @param mask

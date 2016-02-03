@@ -10,17 +10,6 @@
 #include <math.h> 
 #include <opencv2/imgproc.hpp>
 
-void getRGBMatrix(cv::Mat &image, vector<cv::Mat> &channels) {
-
-    cv::split(image, channels);
-
-    cout << "NUM CANALES " << channels.size() << endl;
-    //    cout<<"RED"<<channels.at<uchar>(0)<<endl;
-    //    cout<<"GREEN"<<channels.at<uchar>(1)<<endl;
-    //    cout<<"BLUE"<<channels.at<uchar>(2)<<endl;
-    //    return channels;
-}
-
 cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
     int ncol = 0;
@@ -35,8 +24,8 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     vector<cv::Mat> rgbDest;
     vector<cv::Mat> rgbSource;
 
-    getRGBMatrix(dest, rgbDest);
-    getRGBMatrix(source, rgbSource);
+    cv::split(dest, rgbDest);
+    cv::split(source, rgbSource);
 
     int internalPix = 0;
     int sumNred, sumNblue, sumNgreen;
@@ -146,8 +135,9 @@ cv::Mat seamlessClonningNormal(cv::Mat source, cv::Mat dest, cv::Mat mask) {
         }
     }
     cv::Mat indexes;
-    getRGBMatrix(source, SourceChannels);
-    getRGBMatrix(dest, DestChannels);
+    
+    cv::split(source, SourceChannels);
+    cv::split(dest, DestChannels);
 
     indexes = getIndexes(mask, dest.cols, dest.rows);
 
