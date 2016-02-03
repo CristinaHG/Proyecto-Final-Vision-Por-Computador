@@ -10,7 +10,7 @@
 #include <math.h> 
 #include <opencv2/imgproc.hpp>
 
-void getRGBMatrix(Mat &image, vector<Mat> &channels) {
+void getRGBMatrix(cv::Mat &image, vector<cv::Mat> &channels) {
 
     cv::split(image, channels);
 
@@ -21,7 +21,7 @@ void getRGBMatrix(Mat &image, vector<Mat> &channels) {
     //    return channels;
 }
 
-Mat solVector(Mat &source, Mat &dest, Mat &mask) {
+cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
     int ncol = 0;
     for (int i = 0; i < mask.rows; i++) {
@@ -31,9 +31,9 @@ Mat solVector(Mat &source, Mat &dest, Mat &mask) {
         }
     }
 
-    Mat solutionV = Mat::zeros(3, ncol, CV_8UC3);
-    vector<Mat> rgbDest;
-    vector<Mat> rgbSource;
+    cv::Mat solutionV = cv::Mat::zeros(3, ncol, CV_8UC3);
+    vector<cv::Mat> rgbDest;
+    vector<cv::Mat> rgbSource;
 
     getRGBMatrix(dest, rgbDest);
     getRGBMatrix(source, rgbSource);
@@ -96,7 +96,7 @@ int guidanceVect(cv::Mat &sourceChannel, float x, float y) {
     return total;
 }
 
-Mat CoefficientMatrix(Mat source, Mat dest, Mat mask, Mat index) {
+Mat CoefficientMatrix(cv::Mat source, cv::Mat dest, cv::Mat mask, cv::Mat index) {
 
     int insidePix = 0;
     int n = 0;
@@ -107,7 +107,8 @@ Mat CoefficientMatrix(Mat source, Mat dest, Mat mask, Mat index) {
                 n++;
         }
     }
-    Mat coeffMatrix = Mat::zeros(n, n, CV_8UC3);
+    
+    cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_8UC3);
 
     for (int i = 1; i < source.rows - 1; i++) {
         for (int j = 1; j < source.cols - 1; j++) {
@@ -134,35 +135,35 @@ Mat CoefficientMatrix(Mat source, Mat dest, Mat mask, Mat index) {
     return coeffMatrix;
 }
 
-Mat seamlessClonningNormal(Mat source, Mat dest, Mat mask) {
+cv::Mat seamlessClonningNormal(cv::Mat source, cv::Mat dest, cv::Mat mask) {
 
     int insidePix = 0;
-    vector<Mat> DestChannels;
-    vector<Mat> SourceChannels;
+    vector<cv::Mat> DestChannels;
+    vector<cv::Mat> SourceChannels;
     for (int i = 0; i < mask.rows; i++) {
         for (int j = 0; j < mask.cols; j++) {
             if (mask.at<uchar>(i, j) == 1)
                 insidePix++;
         }
     }
-    Mat indexes;
+    cv::Mat indexes;
     getRGBMatrix(source, SourceChannels);
     getRGBMatrix(dest, DestChannels);
 
     indexes = getIndexes(mask, dest.cols, dest.rows);
 
-    Mat coeffMat;
+    cv::Mat coeffMat;
     coeffMat = CoefficientMatrix(source, dest, mask, indexes);
-    Mat solutionVector;
+    cv::Mat solutionVector;
     solutionVector = solVector(source, dest, mask);
 
-    vector<Mat> solrgb;
+    vector<cv::Mat> solrgb;
 
     solrgb.push_back(coeffMat / solutionVector.row(0));
     solrgb.push_back(coeffMat / solutionVector.row(1));
     solrgb.push_back(coeffMat / solutionVector.row(2));
 
-    Mat result;
+    cv::Mat result;
     result = reconstructImage(solrgb.at(0), solrgb.at(1), solrgb.at(2), mask, dest, indexes);
 
     return result;

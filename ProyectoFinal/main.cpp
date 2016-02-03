@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
     cv::imshow("mixed seamless cloning", output2);
     cv::waitKey(0);
 
-    vector<Mat> channelsVect;
+    vector<cv::Mat> channelsVect;
     getRGBMatrix(im1, channelsVect);
 
     return 0;
