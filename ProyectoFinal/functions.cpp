@@ -98,32 +98,32 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
 
     for (int i = 0; i < mask.rows; i++) {
         for (int j = 0; j < mask.cols; j++) {
-            if (mask.at<uchar>(i, j) == 1) // 0 
+            if (mask.at<uchar>(i, j) == 255) // 0 
                 n++;
         }
     }
 
-    cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_8UC3);
+    cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_8UC1);
 
     for (int i = 1; i < source.rows - 1; i++) {
         for (int j = 1; j < source.cols - 1; j++) {
             if (mask.at<uchar>(i, j) != 0) {
                 insidePix += 1;
+                if (mask.at<uchar>(i - 1, j) != 0) {
+                    coeffMatrix.at<uchar>(insidePix, index.at<int>(i - 1, j)) = -1;
 
-            } else if (mask.at<uchar>(i - 1, j) != 0) {
-                coeffMatrix.at<uchar>(i - 1, j) = -1;
+                } else if (mask.at<uchar>(i, j - 1) != 0) {
+                    coeffMatrix.at<uchar>(insidePix, index.at<int>(i, j - 1)) = -1;
 
-            } else if (mask.at<uchar>(i, j - 1) != 0) {
-                coeffMatrix.at<uchar>(i, j - 1) = -1;
+                } else if (mask.at<uchar>(i + 1, j) != 0) {
+                    coeffMatrix.at<uchar>(insidePix, index.at<int>(i + 1, j)) = -1;
 
-            } else if (mask.at<uchar>(i + 1, j) != 0) {
-                coeffMatrix.at<uchar>(i + 1, j) = -1;
+                } else if (mask.at<uchar>(i, j + 1) != 0) {
+                    coeffMatrix.at<uchar>(insidePix, index.at<int>(i, j + 1)) = -1;
 
-            } else if (mask.at<uchar>(i, j + 1) != 0) {
-                coeffMatrix.at<uchar>(i, j + 1) = -1;
-
-            } else {
-                coeffMatrix.at<uchar>(insidePix, insidePix) = 4;
+                } else {
+                    coeffMatrix.at<uchar>(insidePix, insidePix) = 4;
+                }
             }
         }
     }
@@ -141,17 +141,16 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
                 insidePix++;
         }
     }
-    cv::Mat indexes;
+
 
     cv::split(source, SourceChannels);
     cv::split(dest, DestChannels);
 
-    indexes = getIndexes(mask, dest.cols, dest.rows);
+    cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
 
-    cv::Mat coeffMat;
-    coeffMat = coefficientMatrix(source, dest, mask, indexes);
-    cv::Mat solutionVector;
-    solutionVector = solVector(source, dest, mask);
+
+    cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
+    cv::Mat solutionVector = solVector(source, dest, mask);
 
     cv::Mat_<uchar> solR;
     cv::Mat_<uchar> solG;
@@ -213,15 +212,15 @@ cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
 
     for (int i = 0; i < mask.cols; i++) {
         for (int j = 0; j < mask.rows; j++) {
-            if (mask.at<uchar>(i, j) != 0) {
-//                LOG_MESSAGE("SIZE OF INDEXES");
-//                LOG_MESSAGE(rows);
-//                LOG_MESSAGE(cols);
-//                LOG_MESSAGE("i,j");
-//                LOG_MESSAGE(i);
-//                LOG_MESSAGE(j);
-//                LOG_MESSAGE(insiders)
-                indexes.at<int>(i, j) = ++insiders;
+            if (mask.at<uchar>(j, i) != 0) {
+                //                LOG_MESSAGE("SIZE OF INDEXES");
+                //                LOG_MESSAGE(rows);
+                //                LOG_MESSAGE(cols);
+                //                LOG_MESSAGE("i,j");
+                //                LOG_MESSAGE(i);
+                //                LOG_MESSAGE(j);
+                //                LOG_MESSAGE(insiders)
+                indexes.at<int>(j, i) = ++insiders;
             }
         }
     }
