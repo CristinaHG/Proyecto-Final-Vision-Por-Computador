@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     cv::waitKey(0);
 
     vector<Mat> channelsVect;
-    getRGBMatrix(im1,channelsVect);
+    getRGBMatrix(im1, channelsVect);
 
     return 0;
 }

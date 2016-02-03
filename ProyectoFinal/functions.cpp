@@ -83,8 +83,10 @@ Mat solVector(Mat &source, Mat &dest, Mat &mask) {
     }
 }
 
-int guidanceVect(Mat &sourceChannel, float x, float y) {
+int guidanceVect(cv::Mat &sourceChannel, float x, float y) {
     int total = 0;
+
+    // TODO: Call Mat with .at<>
     float n1 = sourceChannel(x, y) - sourceChannel(x - 1, y);
     float n2 = sourceChannel(x, y) - sourceChannel(x + 1, y);
     float n3 = sourceChannel(x, y) - sourceChannel(x, y - 1);
@@ -132,36 +134,36 @@ Mat CoefficientMatrix(Mat source, Mat dest, Mat mask, Mat index) {
     return coeffMatrix;
 }
 
-Mat seamlessClonningNormal(Mat source, Mat dest,Mat mask){
+Mat seamlessClonningNormal(Mat source, Mat dest, Mat mask) {
 
-    int insidePix=0;
+    int insidePix = 0;
     vector<Mat> DestChannels;
     vector<Mat> SourceChannels;
-    for(int i=0; i<mask.rows;i++){
-        for(int j=0; j<mask.cols; j++){
-            if(mask.at<uchar>(i,j)==1)
+    for (int i = 0; i < mask.rows; i++) {
+        for (int j = 0; j < mask.cols; j++) {
+            if (mask.at<uchar>(i, j) == 1)
                 insidePix++;
         }
     }
     Mat indexes;
-    getRGBMatrix(source,SourceChannels);
-    getRGBMatrix(dest,DestChannels);
-    
-    indexes=getIndexes(mask,dest.cols,dest.rows);
-    
+    getRGBMatrix(source, SourceChannels);
+    getRGBMatrix(dest, DestChannels);
+
+    indexes = getIndexes(mask, dest.cols, dest.rows);
+
     Mat coeffMat;
-    coeffMat=CoefficientMatrix(source,dest,mask,indexes);
+    coeffMat = CoefficientMatrix(source, dest, mask, indexes);
     Mat solutionVector;
-    solutionVector=solVector(source,dest,mask);
-    
+    solutionVector = solVector(source, dest, mask);
+
     vector<Mat> solrgb;
-    
-    solrgb.push_back(coeffMat/solutionVector.row(0));
-    solrgb.push_back(coeffMat/solutionVector.row(1));
-    solrgb.push_back(coeffMat/solutionVector.row(2));
-    
+
+    solrgb.push_back(coeffMat / solutionVector.row(0));
+    solrgb.push_back(coeffMat / solutionVector.row(1));
+    solrgb.push_back(coeffMat / solutionVector.row(2));
+
     Mat result;
-    result=reconstructImage( solrgb.at(0), solrgb.at(1), solrgb.at(2),mask,dest,indexes);
+    result = reconstructImage(solrgb.at(0), solrgb.at(1), solrgb.at(2), mask, dest, indexes);
 
     return result;
 }
