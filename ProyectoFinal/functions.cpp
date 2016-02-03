@@ -95,7 +95,7 @@ int guidanceVect(cv::Mat &sourceChannel, float x, float y) {
     return total;
 }
 
-cv::Mat coefficientMatrix(cv::Mat source, cv::Mat dest, cv::Mat mask, cv::Mat index) {
+cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index) {
 
     int insidePix = 0;
     int n = 0;
@@ -208,7 +208,7 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
 
 cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
     
-    cv::Mat indexes = cv::Mat::zeros(rows, cols, cv::CV_8UC1);
+    cv::Mat indexes = cv::Mat::zeros(rows, cols, CV_8UC1);
 
     int insiders = 0;
 
