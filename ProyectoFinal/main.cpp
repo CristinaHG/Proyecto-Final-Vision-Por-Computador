@@ -21,8 +21,9 @@ int main(int argc, char** argv) {
     cv::Mat im2 = cv::imread("imagenes/Articulo0002080.jpg");
 
     //    Mat mascara = 255*Mat::ones(im2.rows, im2.cols, im2.depth());
-    cv::Mat mask = 255 * cv::Mat::zeros(im2.rows, im2.cols, im2.depth());
+    cv::Mat mask = cv::Mat::zeros(im2.rows, im2.cols, im2.depth());
     cv::Point poly[1][16];
+    
     poly[0][0] = cv::Point(98, 150);
     poly[0][1] = cv::Point(150, 113);
     poly[0][2] = cv::Point(228, 94);
@@ -47,14 +48,14 @@ int main(int argc, char** argv) {
 
     cv::Point center(750, 496);
 
-    cv::Mat output;
-    cv::Mat output2;
-    cv::seamlessClone(im2, im1, mask, center, output, cv::NORMAL_CLONE);
-    cv::seamlessClone(im2, im1, mask, center, output2, cv::MIXED_CLONE);
-    cv::imshow("normal seamless cloning", output);
-    cv::waitKey(0);
-    cv::imshow("mixed seamless cloning", output2);
-    cv::waitKey(0);
+//    cv::Mat output;
+//    cv::Mat output2;
+//    cv::seamlessClone(im2, im1, mask, center, output, cv::NORMAL_CLONE);
+//    cv::seamlessClone(im2, im1, mask, center, output2, cv::MIXED_CLONE);
+//    cv::imshow("normal seamless cloning", output);
+//    cv::waitKey(0);
+//    cv::imshow("mixed seamless cloning", output2);
+//    cv::waitKey(0);
 
     vector<cv::Mat> channelsVect;
     

@@ -102,7 +102,7 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
                 n++;
         }
     }
-    
+
     cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_8UC3);
 
     for (int i = 1; i < source.rows - 1; i++) {
@@ -137,12 +137,12 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     vector<cv::Mat> SourceChannels;
     for (int i = 0; i < mask.rows; i++) {
         for (int j = 0; j < mask.cols; j++) {
-            if (mask.at<uchar>(i, j) == 1)
+            if (mask.at<uchar>(i, j) == 255)
                 insidePix++;
         }
     }
     cv::Mat indexes;
-    
+
     cv::split(source, SourceChannels);
     cv::split(dest, DestChannels);
 
@@ -156,7 +156,7 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::Mat_<uchar> solR;
     cv::Mat_<uchar> solG;
     cv::Mat_<uchar> solB;
-    
+
     solR = coeffMat / solutionVector.row(0);
     solG = coeffMat / solutionVector.row(1);
     solB = coeffMat / solutionVector.row(2);
@@ -206,15 +206,22 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
 }
 
 cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
-    
-    cv::Mat indexes = cv::Mat::zeros(rows, cols, CV_8UC1);
+
+    cv::Mat indexes = cv::Mat::zeros(rows, cols, CV_32SC1);
 
     int insiders = 0;
 
     for (int i = 0; i < mask.cols; i++) {
         for (int j = 0; j < mask.rows; j++) {
             if (mask.at<uchar>(i, j) != 0) {
-                indexes.at<uchar>(i, j) = ++insiders;
+//                LOG_MESSAGE("SIZE OF INDEXES");
+//                LOG_MESSAGE(rows);
+//                LOG_MESSAGE(cols);
+//                LOG_MESSAGE("i,j");
+//                LOG_MESSAGE(i);
+//                LOG_MESSAGE(j);
+//                LOG_MESSAGE(insiders)
+                indexes.at<int>(i, j) = ++insiders;
             }
         }
     }
