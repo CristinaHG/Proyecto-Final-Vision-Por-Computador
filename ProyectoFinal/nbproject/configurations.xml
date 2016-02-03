@@ -38,7 +38,7 @@
       </toolsSet>
       <compileType>
         <cTool>
-          <commandLine>-Wall</commandLine>
+          <commandLine>-pedantic -Wextra -Werror</commandLine>
         </cTool>
         <ccTool>
           <incDir>
