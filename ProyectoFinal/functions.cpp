@@ -75,8 +75,8 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
         solutionV.at<uchar>(1, internalPix) += sumNblue;
         solutionV.at<uchar>(2, internalPix) += sumNgreen;
 
-        return solutionV;
     }
+    return solutionV;
 }
 
 int guidanceVect(cv::Mat &sourceChannel, float x, float y) {
@@ -147,7 +147,6 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::split(dest, DestChannels);
 
     cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
-
 
     cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
     cv::Mat solutionVector = solVector(source, dest, mask);
@@ -224,4 +223,5 @@ cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
             }
         }
     }
+    return indexes;
 }
