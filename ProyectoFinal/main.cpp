@@ -61,21 +61,9 @@ int main(int argc, char** argv) {
     //    cv::waitKey(0);
 
     vector<cv::Mat> channelsVect;
-    
-    cv::imshow("normal seamless cloning", im2);
-    cv::waitKey(0);
 
     cv::Mat result = seamlessClonningNormal(im2, im1, mask);
-    cv::imshow("normal seamless cloning", im1);
-    cv::waitKey(0);
-    cv::imshow("normal seamless cloning", im2);
-    cv::waitKey(0);
-    cv::imshow("normal seamless cloning", result);
-    cv::waitKey(0);
-    cv::imshow("normal seamless cloning", mask);
-    cv::waitKey(0);
-
-
+    
     return 0;
 }
 
