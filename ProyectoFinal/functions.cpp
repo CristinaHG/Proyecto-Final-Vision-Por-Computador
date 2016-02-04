@@ -22,7 +22,7 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     int ncol = 0;
     for (int i = 0; i < mask.rows; i++) {
         for (int j = 0; j < mask.cols; j++) {
-            if (mask.at<uchar>(i, j) == 1)
+            if (mask.at<uchar>(i, j) == 255)
                 ncol++;
         }
     }
@@ -39,42 +39,42 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
     for (int i = 1; i < source.rows - 1; i++) {
         for (int j = 1; i < source.cols - 1; j++) {
-            if (mask.at<uchar>(i, j) == 0)
+          if (mask.at<uchar>(i, j) != 0){
                 internalPix += 1;
 
             if (mask.at<uchar>(i - 1, j) == 0) {
-                solutionV.at<uchar>(1, internalPix) += rgbDest.at(0).at<uchar>(i - 1, j);
-                solutionV.at<uchar>(2, internalPix) += rgbDest.at(1).at<uchar>(i - 1, j);
-                solutionV.at<uchar>(3, internalPix) += rgbDest.at(2).at<uchar>(i - 1, j);
+                solutionV.at<uchar>(0, internalPix) += rgbDest.at(0).at<uchar>(i - 1, j);
+                solutionV.at<uchar>(1, internalPix) += rgbDest.at(1).at<uchar>(i - 1, j);
+                solutionV.at<uchar>(2, internalPix) += rgbDest.at(2).at<uchar>(i - 1, j);
             }
 
             if (mask.at<uchar>(i, j - 1) == 0) {
-                solutionV.at<uchar>(1, internalPix) += rgbDest.at(0).at<uchar>(i, j - 1);
-                solutionV.at<uchar>(2, internalPix) += rgbDest.at(1).at<uchar>(i, j - 1);
-                solutionV.at<uchar>(3, internalPix) += rgbDest.at(2).at<uchar>(i, j - 1);
+                solutionV.at<uchar>(0, internalPix) += rgbDest.at(0).at<uchar>(i, j - 1);
+                solutionV.at<uchar>(1, internalPix) += rgbDest.at(1).at<uchar>(i, j - 1);
+                solutionV.at<uchar>(2, internalPix) += rgbDest.at(2).at<uchar>(i, j - 1);
             }
 
             if (mask.at<uchar>(i + 1, j) == 0) {
-                solutionV.at<uchar>(1, internalPix) += rgbDest.at(0).at<uchar>(i + 1, j);
-                solutionV.at<uchar>(2, internalPix) += rgbDest.at(1).at<uchar>(i + 1, j);
-                solutionV.at<uchar>(3, internalPix) += rgbDest.at(2).at<uchar>(i + 1, j);
+                solutionV.at<uchar>(0, internalPix) += rgbDest.at(0).at<uchar>(i + 1, j);
+                solutionV.at<uchar>(1, internalPix) += rgbDest.at(1).at<uchar>(i + 1, j);
+                solutionV.at<uchar>(2, internalPix) += rgbDest.at(2).at<uchar>(i + 1, j);
             }
 
             if (mask.at<uchar>(i, j + 1) == 0) {
-                solutionV.at<uchar>(1, internalPix) += rgbDest.at(0).at<uchar>(i, j + 1);
-                solutionV.at<uchar>(2, internalPix) += rgbDest.at(1).at<uchar>(i, j + 1);
-                solutionV.at<uchar>(3, internalPix) += rgbDest.at(2).at<uchar>(i, j + 1);
+                solutionV.at<uchar>(0, internalPix) += rgbDest.at(0).at<uchar>(i, j + 1);
+                solutionV.at<uchar>(1, internalPix) += rgbDest.at(1).at<uchar>(i, j + 1);
+                solutionV.at<uchar>(2, internalPix) += rgbDest.at(2).at<uchar>(i, j + 1);
             }
 
             sumNred = guidanceVect(rgbSource.at(0), i, j);
             sumNblue = guidanceVect(rgbSource.at(1), i, j);
             sumNgreen = guidanceVect(rgbSource.at(2), i, j);
-        }
 
         solutionV.at<uchar>(0, internalPix) += sumNred;
         solutionV.at<uchar>(1, internalPix) += sumNblue;
         solutionV.at<uchar>(2, internalPix) += sumNgreen;
-
+        }
+      }
     }
     return solutionV;
 }
