@@ -27,7 +27,7 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
         }
     }
 
-    cv::Mat solutionV = cv::Mat::zeros(3, ncol, CV_8UC3);
+    cv::Mat solutionV = cv::Mat::zeros(3, ncol, CV_64F);
     vector<cv::Mat> rgbDest;
     vector<cv::Mat> rgbSource;
 
@@ -43,27 +43,27 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
                 internalPix += 1;
 
             if (mask.at<uchar>(i - 1, j) == 0) {
-                solutionV.at<uchar>(0, internalPix) += rgbDest.at(0).at<uchar>(i - 1, j);
-                solutionV.at<uchar>(1, internalPix) += rgbDest.at(1).at<uchar>(i - 1, j);
-                solutionV.at<uchar>(2, internalPix) += rgbDest.at(2).at<uchar>(i - 1, j);
+                solutionV.at<double>(0, internalPix) += rgbDest.at(0).at<double>(i - 1, j);
+                solutionV.at<double>(1, internalPix) += rgbDest.at(1).at<double>(i - 1, j);
+                solutionV.at<double>(2, internalPix) += rgbDest.at(2).at<double>(i - 1, j);
             }
 
             if (mask.at<uchar>(i, j - 1) == 0) {
-                solutionV.at<uchar>(0, internalPix) += rgbDest.at(0).at<uchar>(i, j - 1);
-                solutionV.at<uchar>(1, internalPix) += rgbDest.at(1).at<uchar>(i, j - 1);
-                solutionV.at<uchar>(2, internalPix) += rgbDest.at(2).at<uchar>(i, j - 1);
+                solutionV.at<double>(0, internalPix) += rgbDest.at(0).at<double>(i, j - 1);
+                solutionV.at<double>(1, internalPix) += rgbDest.at(1).at<double>(i, j - 1);
+                solutionV.at<double>(2, internalPix) += rgbDest.at(2).at<double>(i, j - 1);
             }
 
             if (mask.at<uchar>(i + 1, j) == 0) {
-                solutionV.at<uchar>(0, internalPix) += rgbDest.at(0).at<uchar>(i + 1, j);
-                solutionV.at<uchar>(1, internalPix) += rgbDest.at(1).at<uchar>(i + 1, j);
-                solutionV.at<uchar>(2, internalPix) += rgbDest.at(2).at<uchar>(i + 1, j);
+                solutionV.at<double>(0, internalPix) += rgbDest.at(0).at<double>(i + 1, j);
+                solutionV.at<double>(1, internalPix) += rgbDest.at(1).at<double>(i + 1, j);
+                solutionV.at<double>(2, internalPix) += rgbDest.at(2).at<double>(i + 1, j);
             }
 
             if (mask.at<uchar>(i, j + 1) == 0) {
-                solutionV.at<uchar>(0, internalPix) += rgbDest.at(0).at<uchar>(i, j + 1);
-                solutionV.at<uchar>(1, internalPix) += rgbDest.at(1).at<uchar>(i, j + 1);
-                solutionV.at<uchar>(2, internalPix) += rgbDest.at(2).at<uchar>(i, j + 1);
+                solutionV.at<double>(0, internalPix) += rgbDest.at(0).at<double>(i, j + 1);
+                solutionV.at<double>(1, internalPix) += rgbDest.at(1).at<double>(i, j + 1);
+                solutionV.at<double>(2, internalPix) += rgbDest.at(2).at<double>(i, j + 1);
             }
 
             sumNred = guidanceVect(rgbSource.at(0), i, j);
@@ -71,9 +71,9 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
             sumNblue = guidanceVect(rgbSource.at(2), i, j);
             
 
-        solutionV.at<uchar>(0, internalPix) += sumNred;
-        solutionV.at<uchar>(1, internalPix) += sumNgreen;
-        solutionV.at<uchar>(2, internalPix) +=sumNblue;
+        solutionV.at<double>(0, internalPix) += sumNred;
+        solutionV.at<double>(1, internalPix) += sumNgreen;
+        solutionV.at<double>(2, internalPix) +=sumNblue;
         }
       }
     }
@@ -104,26 +104,26 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
         }
     }
 
-    cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_8UC1);
+    cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_64F);
 
     for (int i = 1; i < source.cols - 1; i++) {
         for (int j = 1; j < source.rows - 1; j++) {
             if (mask.at<uchar>(i, j) != 0) {
                 insidePix += 1;
                 if (mask.at<uchar>(i - 1, j) != 0) {
-                    coeffMatrix.at<uchar>(insidePix, index.at<int>(i - 1, j)) = -1;
+                    coeffMatrix.at<double>(insidePix, index.at<int>(i - 1, j)) = -1;
 
                 } else if (mask.at<uchar>(i, j - 1) != 0) {
-                    coeffMatrix.at<uchar>(insidePix, index.at<int>(i, j - 1)) = -1;
+                    coeffMatrix.at<double>(insidePix, index.at<int>(i, j - 1)) = -1;
 
                 } else if (mask.at<uchar>(i + 1, j) != 0) {
-                    coeffMatrix.at<uchar>(insidePix, index.at<int>(i + 1, j)) = -1;
+                    coeffMatrix.at<double>(insidePix, index.at<int>(i + 1, j)) = -1;
 
                 } else if (mask.at<uchar>(i, j + 1) != 0) {
-                    coeffMatrix.at<uchar>(insidePix, index.at<int>(i, j + 1)) = -1;
+                    coeffMatrix.at<double>(insidePix, index.at<int>(i, j + 1)) = -1;
 
                 } else {
-                    coeffMatrix.at<uchar>(insidePix, insidePix) = 4;
+                    coeffMatrix.at<double>(insidePix, insidePix) = 4;
                 }
             }
         }
@@ -153,9 +153,20 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
     cv::Mat solutionVector = solVector(source, dest, mask);
 
-    cv::Mat_<uchar> solR = coeffMat / solutionVector.row(0);
-    cv::Mat_<uchar> solG = coeffMat / solutionVector.row(1);
-    cv::Mat_<uchar> solB = coeffMat / solutionVector.row(2);
+    LOG_MESSAGE(coeffMat.size().width);
+    LOG_MESSAGE(coeffMat.size().height);
+    LOG_MESSAGE(solutionVector.row(0).size().width);
+    LOG_MESSAGE(solutionVector.row(0).size().height);
+    LOG_MESSAGE(coeffMat.type());
+    LOG_MESSAGE(coeffMat.channels());
+    LOG_MESSAGE(solutionVector.type());
+    LOG_MESSAGE(solutionVector.row(0).channels());
+    
+    cv::invert(coeffMat, coeffMat);
+    
+    cv::Mat_<uchar> solR = coeffMat * solutionVector.row(0).t();
+    cv::Mat_<uchar> solG = coeffMat * solutionVector.row(1).t();
+    cv::Mat_<uchar> solB = coeffMat * solutionVector.row(2).t();
     
 
     cv::Mat result;

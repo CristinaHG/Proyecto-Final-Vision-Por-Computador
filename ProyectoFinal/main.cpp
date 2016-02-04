@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     cv::Mat mask = cv::imread("imagenes/bn.png", cv::IMREAD_GRAYSCALE);
     mask = mask > 128;
 
-
+    
 //    //    Mat mascara = 255*Mat::ones(im2.rows, im2.cols, im2.depth());
 //    cv::Mat mask = cv::Mat::zeros(im2.rows, im2.cols, im2.depth());
 //    cv::Point poly[1][16];
