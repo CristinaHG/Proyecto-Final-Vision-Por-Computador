@@ -63,7 +63,9 @@ int main(int argc, char** argv) {
     vector<cv::Mat> channelsVect;
 
     cv::Mat result = seamlessClonningNormal(im2, im1, mask);
-    
+    cv::imshow("mixed seamless cloning", result);
+    cv::waitKey(0);
+
     return 0;
 }
 

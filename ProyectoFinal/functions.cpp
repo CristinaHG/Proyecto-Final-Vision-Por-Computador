@@ -92,9 +92,11 @@ uchar guidanceVect(cv::Mat &sourceChannel, int x, int y) {
 cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index) {
 
     int insidePix = 0;
-    
+
     int n = cv::countNonZero(mask);
 
+    //    int size[] = {n, n};
+    //    cv::SparseMat coeffMatrix = cv::SparseMat(2, size, CV_64F);
     cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_64F);
 
     for (int i = 1; i < source.cols - 1; i++) {
@@ -103,11 +105,14 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
                 insidePix += 1;
                 if (mask.at<uchar>(i - 1, j) != 0) {
                     coeffMatrix.at<double>(insidePix, index.at<double>(i - 1, j)) = -1;
-                } else if (mask.at<uchar>(i, j - 1) != 0) {
+                }
+                if (mask.at<uchar>(i, j - 1) != 0) {
                     coeffMatrix.at<double>(insidePix, index.at<double>(i, j - 1)) = -1;
-                } else if (mask.at<uchar>(i + 1, j) != 0) {
+                }
+                if (mask.at<uchar>(i + 1, j) != 0) {
                     coeffMatrix.at<double>(insidePix, index.at<double>(i + 1, j)) = -1;
-                } else if (mask.at<uchar>(i, j + 1) != 0) {
+                }
+                if (mask.at<uchar>(i, j + 1) != 0) {
                     coeffMatrix.at<double>(insidePix, index.at<double>(i, j + 1)) = -1;
                 }
                 coeffMatrix.at<double>(insidePix, insidePix) = 4;
@@ -119,11 +124,11 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
 
 cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
-   
+
     vector<cv::Mat> DestChannels;
     vector<cv::Mat> SourceChannels;
 
-//     int insidePix = cv::countNonZero(mask);
+    //     int insidePix = cv::countNonZero(mask);
 
     cv::split(source, SourceChannels);
     cv::split(dest, DestChannels);
@@ -131,9 +136,9 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::Mat indexes = getIndexes(mask, dest.rows, dest.cols);
 
     cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
-    
+
     cv::Mat solutionVector = solVector(source, dest, mask);
-    
+
     cv::Mat solR;
     cv::Mat solG;
     cv::Mat solB;
@@ -199,6 +204,6 @@ cv::Mat getIndexes(cv::Mat &mask, int rows, int cols) {
             }
         }
     }
-    
+
     return indexes;
 }
