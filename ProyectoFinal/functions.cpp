@@ -201,8 +201,8 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
             }
         }
     }
-    cv::Mat_<uchar> assembledImage;
-    vector<cv::Mat> mv;
+    cv::Mat assembledImage = cv::Mat(newR.size(), newR.type());
+    vector<cv::Mat_<uchar> > mv;
 
     mv.push_back(newR);
     mv.push_back(newG);
