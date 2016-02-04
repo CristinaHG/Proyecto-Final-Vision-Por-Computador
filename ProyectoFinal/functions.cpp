@@ -81,7 +81,7 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 }
 
 int guidanceVect(cv::Mat &sourceChannel, float x, float y) {
-    int total = 0;
+    float total = 0;
 
     float n1 = sourceChannel.at<float>(x, y) - sourceChannel.at<float>(x - 1, y);
     float n2 = sourceChannel.at<float>(x, y) - sourceChannel.at<float>(x + 1, y);
@@ -106,8 +106,8 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
 
     cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_8UC1);
 
-    for (int i = 1; i < source.rows - 1; i++) {
-        for (int j = 1; j < source.cols - 1; j++) {
+    for (int i = 1; i < source.cols - 1; i++) {
+        for (int j = 1; j < source.rows - 1; j++) {
             if (mask.at<uchar>(i, j) != 0) {
                 insidePix += 1;
                 if (mask.at<uchar>(i - 1, j) != 0) {
@@ -206,13 +206,13 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
 
 cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
 
-    cv::Mat indexes = cv::Mat::zeros(rows, cols, CV_32SC1);
+    cv::Mat indexes = cv::Mat::zeros(cols, rows, CV_32SC1);
 
     int insiders = 0;
 
     for (int i = 0; i < mask.cols; i++) {
         for (int j = 0; j < mask.rows; j++) {
-            if (mask.at<uchar>(j, i) != 0) {
+            if (mask.at<uchar>(i, j) != 0) {
                 //                LOG_MESSAGE("SIZE OF INDEXES");
                 //                LOG_MESSAGE(rows);
                 //                LOG_MESSAGE(cols);
@@ -220,7 +220,7 @@ cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
                 //                LOG_MESSAGE(i);
                 //                LOG_MESSAGE(j);
                 //                LOG_MESSAGE(insiders)
-                indexes.at<int>(j, i) = ++insiders;
+                indexes.at<int>(i, j) = ++insiders;
             }
         }
     }
