@@ -129,14 +129,10 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     vector<cv::Mat> DestChannels;
     vector<cv::Mat> SourceChannels;
 
-    for (int i = 0; i < mask.rows; i++) {
-        for (int j = 0; j < mask.cols; j++) {
-            if (mask.at<uchar>(i, j) == 255)
-                insidePix++;
-        }
-    }
+    insidePix = cv::countNonZero(mask);
 
-
+    exit(0);
+    
     cv::split(source, SourceChannels);
     cv::split(dest, DestChannels);
 
