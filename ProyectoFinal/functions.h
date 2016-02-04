@@ -29,7 +29,7 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask);
  * @param y
  * @return 
  */
-int guidanceVect(cv::Mat &sourceChannel, float x, float y);
+uchar guidanceVect(cv::Mat &sourceChannel, int x, int y);
 
 /**
  * 
@@ -39,7 +39,7 @@ int guidanceVect(cv::Mat &sourceChannel, float x, float y);
  * @param index
  * @return 
  */
-cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index);
+cv::SparseMat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index);
 
 /**
  * 
