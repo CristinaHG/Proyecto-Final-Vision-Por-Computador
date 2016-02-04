@@ -37,8 +37,8 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     int internalPix = 0;
     int sumNred, sumNblue, sumNgreen;
 
-    for (int i = 1; i < source.rows - 1; i++) {
-        for (int j = 1; i < source.cols - 1; j++) {
+    for (int i = 1; i < source.cols - 1; i++) {
+        for (int j = 1; j < source.rows - 1; j++) {
           if (mask.at<uchar>(i, j) != 0){
                 internalPix += 1;
 
@@ -136,6 +136,7 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     int insidePix = 0;
     vector<cv::Mat> DestChannels;
     vector<cv::Mat> SourceChannels;
+    
     for (int i = 0; i < mask.rows; i++) {
         for (int j = 0; j < mask.cols; j++) {
             if (mask.at<uchar>(i, j) == 255)
