@@ -153,13 +153,10 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
     cv::Mat solutionVector = solVector(source, dest, mask);
 
-    cv::Mat_<uchar> solR;
-    cv::Mat_<uchar> solG;
-    cv::Mat_<uchar> solB;
-
-    solR = coeffMat / solutionVector.row(0);
-    solG = coeffMat / solutionVector.row(1);
-    solB = coeffMat / solutionVector.row(2);
+    cv::Mat_<uchar> solR = coeffMat / solutionVector.row(0);
+    cv::Mat_<uchar> solG = coeffMat / solutionVector.row(1);
+    cv::Mat_<uchar> solB = coeffMat / solutionVector.row(2);
+    
 
     cv::Mat result;
     result = reconstructImage(solR, solG, solB, mask, dest, indexes);
