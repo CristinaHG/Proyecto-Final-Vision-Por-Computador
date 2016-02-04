@@ -67,12 +67,13 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
             }
 
             sumNred = guidanceVect(rgbSource.at(0), i, j);
-            sumNblue = guidanceVect(rgbSource.at(1), i, j);
-            sumNgreen = guidanceVect(rgbSource.at(2), i, j);
+            sumNgreen = guidanceVect(rgbSource.at(1), i, j);
+            sumNblue = guidanceVect(rgbSource.at(2), i, j);
+            
 
         solutionV.at<uchar>(0, internalPix) += sumNred;
-        solutionV.at<uchar>(1, internalPix) += sumNblue;
-        solutionV.at<uchar>(2, internalPix) += sumNgreen;
+        solutionV.at<uchar>(1, internalPix) += sumNgreen;
+        solutionV.at<uchar>(2, internalPix) +=sumNblue;
         }
       }
     }
