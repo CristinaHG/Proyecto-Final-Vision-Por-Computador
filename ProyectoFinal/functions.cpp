@@ -92,14 +92,8 @@ uchar guidanceVect(cv::Mat &sourceChannel, int x, int y) {
 cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index) {
 
     int insidePix = 0;
-    int n = 0;
-
-    for (int i = 0; i < mask.rows; i++) {
-        for (int j = 0; j < mask.cols; j++) {
-            if (mask.at<uchar>(i, j) == 255) // 0 
-                n++;
-        }
-    }
+    
+    int n = cv::countNonZero(mask);
 
     cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_64F);
 
@@ -125,22 +119,21 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
 
 cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
-    int insidePix = 0;
+   
     vector<cv::Mat> DestChannels;
     vector<cv::Mat> SourceChannels;
 
-    insidePix = cv::countNonZero(mask);
+//     int insidePix = cv::countNonZero(mask);
 
-    exit(0);
-    
     cv::split(source, SourceChannels);
     cv::split(dest, DestChannels);
 
-    cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
+    cv::Mat indexes = getIndexes(mask, dest.rows, dest.cols);
 
     cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
+    
     cv::Mat solutionVector = solVector(source, dest, mask);
-
+    
     cv::Mat solR;
     cv::Mat solG;
     cv::Mat solB;
@@ -149,8 +142,6 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::solve(coeffMat, solutionVector.row(1).t(), solG);
     cv::solve(coeffMat, solutionVector.row(2).t(), solB);
 
-    LOG_MESSAGE(coeffMat);
-    
     cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes);
 
     return result;
@@ -195,9 +186,9 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
     return assembledImage;
 }
 
-cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
+cv::Mat getIndexes(cv::Mat &mask, int rows, int cols) {
 
-    cv::Mat indexes = cv::Mat::zeros(cols, rows, CV_64F);
+    cv::Mat indexes = cv::Mat::zeros(rows, cols, CV_64F);
 
     double insiders = 0;
 
@@ -208,5 +199,6 @@ cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
             }
         }
     }
+    
     return indexes;
 }
