@@ -17,9 +17,9 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
-    cv::Mat im1 = cv::imread("imagenes/playa.jpg");
-    cv::Mat im2 = cv::imread("imagenes/estrella-de-mar-equinodermos.png");
-    cv::Mat mask = cv::imread("imagenes/bn.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat im1 = cv::imread("imagenes/tar_img02.jpg");
+    cv::Mat im2 = cv::imread("imagenes/src_img02.jpg");
+    cv::Mat mask = cv::imread("imagenes/mask_img02.jpg", cv::IMREAD_GRAYSCALE);
     mask = mask > 128;
 
 
