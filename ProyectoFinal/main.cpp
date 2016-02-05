@@ -18,11 +18,11 @@ using namespace std;
 int main(int argc, char** argv) {
 
 
-    cv::Mat im1 = cv::imread("imagenes/dest_playa.jpg");
-    cv::Mat im2 = cv::imread("imagenes/dest_crucero.png");
-    cv::Mat mask = cv::imread("imagenes/crucero_mask.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat im1 = cv::imread("imagenes/dest_desert.jpg");
+    cv::Mat im2 = cv::imread("imagenes/shark_src.jpeg");
+    cv::Mat mask = cv::imread("imagenes/shark_mask.jpeg", cv::IMREAD_GRAYSCALE);
     mask = mask > 128;
-    cout<<mask;
+
     im1.convertTo(im1, CV_64FC3);
     im2.convertTo(im2, CV_64FC3);
 
