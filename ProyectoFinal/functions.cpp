@@ -121,8 +121,8 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
 
     int n = cv::countNonZero(mask);
 
-    //    int size[] = {n, n};
-    //    cv::SparseMat coeffMatrix = cv::SparseMat(2, size, CV_64FC1);
+    //        int size[] = {n, n};
+    //        cv::SparseMat coeffMatrix2 = cv::SparseMat(2, size, CV_64FC1);
     cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_64FC1);
 
     for (int i = 1; i < source.cols - 1; i++) {
@@ -212,7 +212,29 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
 
 
     // TODO Add assert to verify not overflow image
-    cv::Rect roi = cv::Rect(p, mask.size());
+    int minx = INT_MAX, miny = INT_MAX, maxx = INT_MIN, maxy = INT_MIN;
+    for (int i = 0; i < mask.size().height; i++) {
+        for (int j = 0; j < mask.size().width; j++) {
+            if (mask.at<uchar>(i, j) == 255) {
+                minx = std::min(minx, i);
+                maxx = std::max(maxx, i);
+                miny = std::min(miny, j);
+                maxy = std::max(maxy, j);
+            }
+        }
+    }
+
+    int lenx = maxx - minx;
+    int leny = maxy - miny;
+
+    int minxd = p.y - lenx / 2;
+    int maxxd = p.y + lenx / 2;
+    int minyd = p.x - leny / 2;
+    int maxyd = p.x + leny / 2;
+
+    CV_Assert(minxd >= 0 && minyd >= 0 && maxxd <= dest.rows && maxyd <= dest.cols);
+    
+    cv::Rect roi = cv::Rect(minyd,minxd,leny,lenx);
 
     cv::split(dest, destChannels);
 
