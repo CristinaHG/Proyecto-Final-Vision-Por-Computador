@@ -17,6 +17,8 @@
 #define LOG_MESSAGE(x)
 #endif
 
+using namespace cv;
+
 cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, bool mixin) {
 
     int ncol = cv::countNonZero(mask);
@@ -178,15 +180,6 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
 cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
-
-    vector<cv::Mat> DestChannels;
-    vector<cv::Mat> SourceChannels;
-
-    //     int insidePix = cv::countNonZero(mask);
-
-    cv::split(source, SourceChannels);
-    cv::split(dest, DestChannels);
-
     cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
 
     cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
@@ -209,36 +202,40 @@ cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
 cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::Mat &dest, cv::Mat &indexes) {
 
+
     r.convertTo(r, CV_8UC1);
     g.convertTo(g, CV_8UC1);
     b.convertTo(b, CV_8UC1);
     dest.convertTo(dest, CV_8UC3);
 
-
     vector<cv::Mat> destChannels;
+
+    cv::Rect roi = cv::Rect(dest.rows / 2, dest.cols / 2, 150, 150);
 
     cv::split(dest, destChannels);
 
-    cv::Mat newR, newG, newB;
+    cv::Mat newR = destChannels.at(2);
+    cv::Mat newG = destChannels.at(1);
+    cv::Mat newB = destChannels.at(0);
 
-    destChannels.at(2).copyTo(newR);
-    destChannels.at(1).copyTo(newG);
-    destChannels.at(0).copyTo(newB);
+    cv::Mat newRroi = newR(roi);
+    cv::Mat newGroi = newG(roi);
+    cv::Mat newBroi = newB(roi);
 
     for (int i = 0; i < mask.cols; i++) {
         for (int k = 0; k < mask.rows; k++) {
             if (mask.at<uchar>(i, k) != 0) {
                 int index = indexes.at<double>(i, k);
-                newR.at<uchar>(i, k) = r.at<uchar>(index);
-                newG.at<uchar>(i, k) = g.at<uchar>(index);
-                newB.at<uchar>(i, k) = b.at<uchar>(index);
+                newRroi.at<uchar>(i, k) = r.at<uchar>(index);
+                newGroi.at<uchar>(i, k) = g.at<uchar>(index);
+                newBroi.at<uchar>(i, k) = b.at<uchar>(index);
             }
         }
     }
 
-    cv::Mat assembledImage = cv::Mat(newR.size(), newR.type());
-    vector<cv::Mat_<double> > mv;
+    cv::Mat assembledImage = cv::Mat(dest.size(), dest.type());
 
+    vector<cv::Mat_<double> > mv;
     mv.push_back(newB);
     mv.push_back(newG);
     mv.push_back(newR);
