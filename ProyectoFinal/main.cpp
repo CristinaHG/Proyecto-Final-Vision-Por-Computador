@@ -18,8 +18,8 @@ using namespace std;
 int main(int argc, char** argv) {
 
     cv::Mat im1 = cv::imread("imagenes/playa.jpg");
-    cv::Mat im2 = cv::imread("imagenes/estrella.jpg");
-    cv::Mat mask = cv::imread("imagenes/esbn.jpg", cv::IMREAD_GRAYSCALE);
+    cv::Mat im2 = cv::imread("imagenes/estrella-de-mar-equinodermos.png");
+    cv::Mat mask = cv::imread("imagenes/bn.png", cv::IMREAD_GRAYSCALE);
     mask = mask > 128;
 
     im1.convertTo(im1, CV_64FC3);

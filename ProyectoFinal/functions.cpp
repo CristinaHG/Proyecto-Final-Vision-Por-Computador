@@ -107,6 +107,7 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
                 if (mask.at<uchar>(i, j + 1) != 0) {
                     coeffMatrix.at<double>(insidePix, index.at<double>(i, j + 1)) = -1;
                 }
+                
                 coeffMatrix.at<double>(insidePix, insidePix) = 4;
                 insidePix += 1;
             }
@@ -140,10 +141,10 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     solR = coeffMat * solutionVector.row(2).t();
     solG = coeffMat * solutionVector.row(1).t();
     solB = coeffMat * solutionVector.row(0).t();
-
-    //    cv::solve(coeffMat, solutionVector.row(0).t(), solR);
-    //    cv::solve(coeffMat, solutionVector.row(1).t(), solG);
-    //    cv::solve(coeffMat, solutionVector.row(2).t(), solB);
+//
+//        cv::solve(coeffMat, solutionVector.row(2).t(), solR);
+//        cv::solve(coeffMat, solutionVector.row(1).t(), solG);
+//        cv::solve(coeffMat, solutionVector.row(0).t(), solB);
 
     cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes);
 
@@ -207,7 +208,8 @@ cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
     for (int i = 0; i < mask.cols; i++) {
         for (int j = 0; j < mask.rows; j++) {
             if (mask.at<uchar>(i, j) != 0) {
-                indexes.at<double>(i, j) = ++insiders;
+                indexes.at<double>(i, j) = insiders;
+                ++insiders;
             }
         }
     }
