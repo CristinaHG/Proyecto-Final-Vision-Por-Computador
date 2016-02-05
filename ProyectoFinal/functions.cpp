@@ -107,7 +107,7 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
                 if (mask.at<uchar>(i, j + 1) != 0) {
                     coeffMatrix.at<double>(insidePix, index.at<double>(i, j + 1)) = -1;
                 }
-                
+
                 coeffMatrix.at<double>(insidePix, insidePix) = 4;
                 insidePix += 1;
             }
@@ -136,23 +136,14 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::Mat solG;
     cv::Mat solB;
 
-    cv::invert(coeffMat, coeffMat);
-
-    solR = coeffMat * solutionVector.row(2).t();
-    solG = coeffMat * solutionVector.row(1).t();
-    solB = coeffMat * solutionVector.row(0).t();
-//
-//        cv::solve(coeffMat, solutionVector.row(2).t(), solR);
-//        cv::solve(coeffMat, solutionVector.row(1).t(), solG);
-//        cv::solve(coeffMat, solutionVector.row(0).t(), solB);
+    cv::solve(coeffMat, solutionVector.row(2).t(), solR, cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_CHOLESKY);
 
     cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes);
 
     return result;
 }
-
-
-
 
 //////////////////////////////////////////////////////////////////////
 
@@ -162,8 +153,8 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
     g.convertTo(g, CV_8UC1);
     b.convertTo(b, CV_8UC1);
     dest.convertTo(dest, CV_8UC3);
-    
-    
+
+
     vector<cv::Mat> destChannels;
 
     cv::split(dest, destChannels);
