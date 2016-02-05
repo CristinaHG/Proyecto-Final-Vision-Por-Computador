@@ -18,8 +18,8 @@ using namespace std;
 int main(int argc, char** argv) {
 
     cv::Mat im1 = cv::imread("imagenes/playa.jpg");
-    cv::Mat im2 = cv::imread("imagenes/estrella-de-mar-equinodermos.png");
-    cv::Mat mask = cv::imread("imagenes/bn4.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat im2 = cv::imread("imagenes/nube.jpg");
+    cv::Mat mask = cv::imread("imagenes/nubebn1.jpg", cv::IMREAD_GRAYSCALE);
     mask = mask > 128;
 
     im1.convertTo(im1, CV_64FC3);
@@ -29,6 +29,7 @@ int main(int argc, char** argv) {
 
     cv::Mat result = seamlessClonningNormal(im2, im1, mask);
     cv::imshow("mixed seamless cloning", result);
+    cv::imwrite("results/nubebn1.jpg",result);
     cv::waitKey(0);
 
     return 0;
