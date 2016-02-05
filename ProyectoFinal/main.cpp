@@ -59,17 +59,16 @@ int main(int argc, char** argv) {
     cv::Mat mask = cv::imread("imagenes/bn4.png", cv::IMREAD_GRAYSCALE);
     mask = mask > 128;
 
-
+    img = im1;
     int k;
     imshow("image", im1);
     while (1) {
-        cap >> img;
         cvSetMouseCallback("image", mouseHandler, NULL);
         if (select_flag == 1) {
             imshow("ROI", roiImg); /* show the image bounded by the box */
         }
-        rectangle(img, rect, CV_RGB(255, 0, 0), 3, 8, 0);
-        imshow("image", img);
+        rectangle(im1, rect, CV_RGB(255, 0, 0), 3, 8, 0);
+        imshow("image", im1);
         k = waitKey(10);
         if (k == 27) {
             break;
