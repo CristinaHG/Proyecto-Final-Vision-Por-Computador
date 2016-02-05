@@ -210,7 +210,7 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
 
     vector<cv::Mat> destChannels;
 
-    
+
     // TODO Add assert to verify not overflow image
     cv::Rect roi = cv::Rect(p, mask.size());
 
