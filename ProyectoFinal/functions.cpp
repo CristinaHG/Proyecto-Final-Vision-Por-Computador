@@ -17,7 +17,7 @@
 #define LOG_MESSAGE(x)
 #endif
 
-cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
+cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, bool mixin) {
 
     int ncol = cv::countNonZero(mask);
 
@@ -58,13 +58,20 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
                     solutionV.at<double>(2, internalPix) += rgbDest.at(0).at<double>(i, j + 1);
                 }
 
-                sumNred = guidanceVect(rgbSource.at(2), i, j);
-                sumNgreen = guidanceVect(rgbSource.at(1), i, j);
-                sumNblue = guidanceVect(rgbSource.at(0), i, j);
+                if (mixin) {
+                    sumNred = guidanceVectMixin(rgbSource.at(2), rgbDest.at(2), i, j);
+                    sumNgreen = guidanceVectMixin(rgbSource.at(1), rgbDest.at(1), i, j);
+                    sumNblue = guidanceVectMixin(rgbSource.at(0), rgbDest.at(0), i, j);
+                } else {
+                    sumNred = guidanceVect(rgbSource.at(2), i, j);
+                    sumNgreen = guidanceVect(rgbSource.at(1), i, j);
+                    sumNblue = guidanceVect(rgbSource.at(0), i, j);
+                }
 
                 solutionV.at<double>(0, internalPix) += sumNblue;
                 solutionV.at<double>(1, internalPix) += sumNgreen;
                 solutionV.at<double>(2, internalPix) += sumNred;
+
                 internalPix += 1;
             }
         }
@@ -78,6 +85,30 @@ double guidanceVect(cv::Mat &sourceChannel, int x, int y) {
     double n2 = sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x + 1, y);
     double n3 = sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x, y - 1);
     double n4 = sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x, y + 1);
+
+    return n1 + n2 + n3 + n4;
+}
+
+double guidanceVectMixin(cv::Mat &sourceChannel, cv::Mat &destChannel, int x, int y) {
+
+    double n1, n2, n3, n4;
+
+    if (abs(sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x - 1, y)) > abs(destChannel.at<double>(x, y) - destChannel.at<double>(x - 1, y)))
+        n1 = sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x - 1, y);
+    else
+        n1 = destChannel.at<double>(x, y) - destChannel.at<double>(x - 1, y);
+    if (abs(sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x + 1, y)) > abs(destChannel.at<double>(x, y) - destChannel.at<double>(x + 1, y)))
+        n2 = sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x + 1, y);
+    else
+        n2 = destChannel.at<double>(x, y) - destChannel.at<double>(x + 1, y);
+    if (abs(sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x, y - 1)) > abs(destChannel.at<double>(x, y) - destChannel.at<double>(x, y - 1)))
+        n3 = sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x, y - 1);
+    else
+        n3 = destChannel.at<double>(x, y) - destChannel.at<double>(x, y - 1);
+    if (abs(sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x, y + 1)) > abs(destChannel.at<double>(x, y) - destChannel.at<double>(x, y + 1)))
+        n4 = sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x, y + 1);
+    else
+        n4 = destChannel.at<double>(x, y) - destChannel.at<double>(x, y + 1);
 
     return n1 + n2 + n3 + n4;
 }
@@ -130,7 +161,36 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
 
     cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
-    cv::Mat solutionVector = solVector(source, dest, mask);
+    cv::Mat solutionVector = solVector(source, dest, mask, false);
+
+    cv::Mat solR;
+    cv::Mat solG;
+    cv::Mat solB;
+
+    cv::solve(coeffMat, solutionVector.row(2).t(), solR, cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_CHOLESKY);
+
+    cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes);
+
+    return result;
+}
+
+cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
+
+
+    vector<cv::Mat> DestChannels;
+    vector<cv::Mat> SourceChannels;
+
+    //     int insidePix = cv::countNonZero(mask);
+
+    cv::split(source, SourceChannels);
+    cv::split(dest, DestChannels);
+
+    cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
+
+    cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
+    cv::Mat solutionVector = solVector(source, dest, mask, true);
 
     cv::Mat solR;
     cv::Mat solG;

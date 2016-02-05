@@ -26,10 +26,18 @@ int main(int argc, char** argv) {
     im2.convertTo(im2, CV_64FC3);
 
     vector<cv::Mat> channelsVect;
+//
+//    cv::Mat result = seamlessClonningNormal(im2, im1, mask);
+//    cv::imshow("seamless cloning", result);
+////    cv::imwrite("results/nubebn1.jpg",result);
+//    cv::waitKey(0);
 
-    cv::Mat result = seamlessClonningNormal(im2, im1, mask);
-    cv::imshow("mixed seamless cloning", result);
-    cv::imwrite("results/nubebn1.jpg",result);
+    im1.convertTo(im1, CV_64FC3);
+    im2.convertTo(im2, CV_64FC3);
+    
+    cv::Mat result2 = seamlessClonningMixin(im2, im1, mask);
+    cv::imshow("mixed seamless cloning", result2);
+    cv::imwrite("results/nubebn1mixed.jpg",result2);
     cv::waitKey(0);
 
     return 0;
