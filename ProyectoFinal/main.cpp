@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     im1.convertTo(im1, CV_64FC3);
     im2.convertTo(im2, CV_64FC3);
 
-    cv::Mat result2 = seamlessClonningMixin(im2, im1, mask);
+    cv::Mat result2 = seamlessClonningMixin(im2, im1, mask, cv::Point(765, 520));
     cv::imshow("mixed seamless cloning", result2);
     //    cv::imwrite("results/desertnube.jpg",result2);
     cv::waitKey(0);

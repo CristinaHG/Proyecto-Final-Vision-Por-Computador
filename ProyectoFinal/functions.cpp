@@ -149,7 +149,7 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
     return coeffMatrix;
 }
 
-cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
+cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Point p) {
 
 
     vector<cv::Mat> DestChannels;
@@ -173,12 +173,12 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_CHOLESKY);
     cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_CHOLESKY);
 
-    cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes);
+    cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes, p);
 
     return result;
 }
 
-cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
+cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Point p) {
 
     cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
 
@@ -193,14 +193,14 @@ cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_CHOLESKY);
     cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_CHOLESKY);
 
-    cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes);
+    cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes, p);
 
     return result;
 }
 
 //////////////////////////////////////////////////////////////////////
 
-cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::Mat &dest, cv::Mat &indexes) {
+cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::Mat &dest, cv::Mat &indexes, cv::Point p) {
 
 
     r.convertTo(r, CV_8UC1);
@@ -210,7 +210,9 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
 
     vector<cv::Mat> destChannels;
 
-    cv::Rect roi = cv::Rect(dest.rows / 2, dest.cols / 2, 150, 150);
+    
+    // TODO Add assert to verify not overflow image
+    cv::Rect roi = cv::Rect(p, mask.size());
 
     cv::split(dest, destChannels);
 
