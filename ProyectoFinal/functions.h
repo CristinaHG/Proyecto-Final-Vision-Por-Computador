@@ -29,7 +29,7 @@ cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask);
  * @param y
  * @return 
  */
-uchar guidanceVect(cv::Mat &sourceChannel, int x, int y);
+double guidanceVect(cv::Mat &sourceChannel, int x, int y);
 
 /**
  * 
