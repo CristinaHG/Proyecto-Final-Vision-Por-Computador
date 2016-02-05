@@ -39,7 +39,7 @@ uchar guidanceVect(cv::Mat &sourceChannel, int x, int y);
  * @param index
  * @return 
  */
-cv::SparseMat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index);
+cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index);
 
 /**
  * 

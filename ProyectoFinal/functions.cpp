@@ -83,33 +83,33 @@ uchar guidanceVect(cv::Mat &sourceChannel, int x, int y) {
     return n1 + n2 + n3 + n4;
 }
 
-cv::SparseMat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index) {
+cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index) {
 
     int insidePix = 0;
 
     int n = cv::countNonZero(mask);
 
-    int size[] = {n, n};
-    cv::SparseMat coeffMatrix = cv::SparseMat(2, size, CV_64F);
-    //    cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_64F);
+//    int size[] = {n, n};
+//    cv::SparseMat coeffMatrix = cv::SparseMat(2, size, CV_64F);
+        cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_64F);
 
     for (int i = 1; i < source.cols - 1; i++) {
         for (int j = 1; j < source.rows - 1; j++) {
             if (mask.at<uchar>(i, j) != 0) {
-                insidePix += 1;
                 if (mask.at<uchar>(i - 1, j) != 0) {
-                    coeffMatrix.ref<double>(insidePix, index.at<double>(i - 1, j)) = -1;
+                    coeffMatrix.at<double>(insidePix, index.at<double>(i - 1, j)) = -1;
                 }
                 if (mask.at<uchar>(i, j - 1) != 0) {
-                    coeffMatrix.ref<double>(insidePix, index.at<double>(i, j - 1)) = -1;
+                    coeffMatrix.at<double>(insidePix, index.at<double>(i, j - 1)) = -1;
                 }
                 if (mask.at<uchar>(i + 1, j) != 0) {
-                    coeffMatrix.ref<double>(insidePix, index.at<double>(i + 1, j)) = -1;
+                    coeffMatrix.at<double>(insidePix, index.at<double>(i + 1, j)) = -1;
                 }
                 if (mask.at<uchar>(i, j + 1) != 0) {
-                    coeffMatrix.ref<double>(insidePix, index.at<double>(i, j + 1)) = -1;
+                    coeffMatrix.at<double>(insidePix, index.at<double>(i, j + 1)) = -1;
                 }
-                coeffMatrix.ref<double>(insidePix, insidePix) = 4;
+                coeffMatrix.at<double>(insidePix, insidePix) = 4;
+                insidePix += 1;
             }
         }
     }
@@ -127,21 +127,18 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
     cv::split(source, SourceChannels);
     cv::split(dest, DestChannels);
 
-    cv::Mat indexes = getIndexes(mask, dest.rows, dest.cols);
+    cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
 
-    cv::SparseMat coeffMat = coefficientMatrix(source, dest, mask, indexes);
+    cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
     cv::Mat solutionVector = solVector(source, dest, mask);
-
-    cv::Mat dense;
-    coeffMat.convertTo(dense, CV_64F);
 
     cv::Mat solR;
     cv::Mat solG;
     cv::Mat solB;
 
-    cv::solve(dense, solutionVector.row(0).t(), solR);
-    cv::solve(dense, solutionVector.row(1).t(), solG);
-    cv::solve(dense, solutionVector.row(2).t(), solB);
+    cv::solve(coeffMat, solutionVector.row(0).t(), solR,  cv::DECOMP_SVD);
+    cv::solve(coeffMat, solutionVector.row(1).t(), solG,  cv::DECOMP_SVD);
+    cv::solve(coeffMat, solutionVector.row(2).t(), solB,  cv::DECOMP_SVD);
 
     cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes);
 
@@ -155,6 +152,10 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask) {
 
 cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::Mat &dest, cv::Mat &indexes) {
 
+    r.convertTo(r, CV_8UC1);
+    g.convertTo(g, CV_8UC1);
+    b.convertTo(b, CV_8UC1);
+    
     vector<cv::Mat> destChannels;
 
     cv::split(dest, destChannels);
@@ -164,7 +165,7 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
     destChannels.at(0).copyTo(newR);
     destChannels.at(1).copyTo(newG);
     destChannels.at(2).copyTo(newB);
-
+    
     for (int i = 0; i < mask.cols; i++) {
         for (int k = 0; k < mask.rows; k++) {
             if (mask.at<uchar>(i, k) != 0) {
@@ -183,13 +184,13 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
     mv.push_back(newB);
 
     cv::merge(mv, assembledImage);
-
+    
     return assembledImage;
 }
 
-cv::Mat getIndexes(cv::Mat &mask, int rows, int cols) {
+cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
 
-    cv::Mat indexes = cv::Mat::zeros(rows, cols, CV_64F);
+    cv::Mat indexes = cv::Mat::zeros(cols, rows, CV_64F);
 
     double insiders = 0;
 

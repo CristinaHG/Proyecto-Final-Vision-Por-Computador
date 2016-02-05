@@ -17,11 +17,10 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
-    cv::Mat im1 = cv::imread("imagenes/tar_img02.jpg");
-    cv::Mat im2 = cv::imread("imagenes/src_img02.jpg");
-    cv::Mat mask = cv::imread("imagenes/mask_img02.jpg", cv::IMREAD_GRAYSCALE);
+    cv::Mat im1 = cv::imread("imagenes/playa.jpg");
+    cv::Mat im2 = cv::imread("imagenes/estrella-de-mar-equinodermos.png");
+    cv::Mat mask = cv::imread("imagenes/bn3.png", cv::IMREAD_GRAYSCALE);
     mask = mask > 128;
-
 
     //    //    Mat mascara = 255*Mat::ones(im2.rows, im2.cols, im2.depth());
     //    cv::Mat mask = cv::Mat::zeros(im2.rows, im2.cols, im2.depth());
