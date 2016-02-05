@@ -17,7 +17,7 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
-    cv::Mat im1 = cv::imread("imagenes/playa.jpg");
+    cv::Mat im1 = cv::imread("imagenes/desert.jpg");
     cv::Mat im2 = cv::imread("imagenes/nube.jpg");
     cv::Mat mask = cv::imread("imagenes/nubebn1.jpg", cv::IMREAD_GRAYSCALE);
     mask = mask > 128;
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
     
     cv::Mat result2 = seamlessClonningMixin(im2, im1, mask);
     cv::imshow("mixed seamless cloning", result2);
-    cv::imwrite("results/nubebn1mixed.jpg",result2);
+    cv::imwrite("results/desertnube.jpg",result2);
     cv::waitKey(0);
 
     return 0;
