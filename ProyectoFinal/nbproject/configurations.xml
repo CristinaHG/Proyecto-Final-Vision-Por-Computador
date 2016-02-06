@@ -50,6 +50,7 @@
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs opencv`</linkerOptionItem>
           </linkerLibItems>
+          <commandLine>-Wall -Werror -pedantic</commandLine>
         </linkerTool>
       </compileType>
       <item path="functions.cpp" ex="false" tool="1" flavor2="0">

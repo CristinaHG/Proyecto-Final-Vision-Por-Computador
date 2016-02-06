@@ -20,7 +20,7 @@ using namespace std;
  * @param mask
  * @return 
  */
-cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, bool);
+cv::Mat solVector(const cv::Mat &source, const cv::Mat &dest, const cv::Mat &mask, bool, int nonz);
 
 /**
  * 
@@ -40,7 +40,7 @@ double guidanceVectMixin(cv::Mat &sourceChannel, cv::Mat &destChannel, int x, in
  * @param index
  * @return 
  */
-cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index);
+cv::Mat coefficientMatrix(const cv::Size &sz, const cv::Mat &mask, const cv::Mat &index, int nonz);
 
 /**
  * 
@@ -63,7 +63,7 @@ cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv:
  * @param indexes
  * @return 
  */
-cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::Mat &dest, cv::Mat &indexes, cv::Point p);
+cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, const cv::Mat &mask, cv::Mat &dest, const cv::Mat &indexes, const cv::Point &p);
 
 /**
  * 

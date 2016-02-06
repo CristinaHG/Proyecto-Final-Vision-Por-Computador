@@ -18,11 +18,10 @@
 #define LOG_MESSAGE(x)
 #endif
 
-cv::Mat solVector(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, bool mixin) {
+cv::Mat solVector(const cv::Mat &source, const cv::Mat &dest, const cv::Mat &mask, bool mixin, int nonz) {
 
-    int ncol = cv::countNonZero(mask);
+    cv::Mat solutionV = cv::Mat::zeros(3, nonz, CV_64FC1);
 
-    cv::Mat solutionV = cv::Mat::zeros(3, ncol, CV_64FC1);
     vector<cv::Mat> rgbDest;
     vector<cv::Mat> rgbSource;
 
@@ -114,18 +113,16 @@ double guidanceVectMixin(cv::Mat &sourceChannel, cv::Mat &destChannel, int x, in
     return n1 + n2 + n3 + n4;
 }
 
-cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat &index) {
+cv::Mat coefficientMatrix(const cv::Size &sz, const cv::Mat &mask, const cv::Mat &index, int nonz) {
 
     int insidePix = 0;
 
-    int n = cv::countNonZero(mask);
-
     //        int size[] = {n, n};
     //        cv::SparseMat coeffMatrix2 = cv::SparseMat(2, size, CV_64FC1);
-    cv::Mat coeffMatrix = cv::Mat::zeros(n, n, CV_64FC1);
+    cv::Mat coeffMatrix = cv::Mat::zeros(nonz, nonz, CV_64FC1);
 
-    for (int i = 1; i < source.cols - 1; i++) {
-        for (int j = 1; j < source.rows - 1; j++) {
+    for (int i = 1; i < sz.width - 1; i++) {
+        for (int j = 1; j < sz.height - 1; j++) {
             if (mask.at<uchar>(i, j) != 0) {
                 if (mask.at<uchar>(i - 1, j) != 0) {
                     coeffMatrix.at<double>(insidePix, index.at<double>(i - 1, j)) = -1;
@@ -139,7 +136,6 @@ cv::Mat coefficientMatrix(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Mat
                 if (mask.at<uchar>(i, j + 1) != 0) {
                     coeffMatrix.at<double>(insidePix, index.at<double>(i, j + 1)) = -1;
                 }
-
                 coeffMatrix.at<double>(insidePix, insidePix) = 4;
                 insidePix += 1;
             }
@@ -154,20 +150,20 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv
     vector<cv::Mat> DestChannels;
     vector<cv::Mat> SourceChannels;
 
-    //     int insidePix = cv::countNonZero(mask);
-
     cv::split(source, SourceChannels);
     cv::split(dest, DestChannels);
 
     cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
 
-    cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
-    cv::Mat solutionVector = solVector(source, dest, mask, false);
+    int nonzero = cv::countNonZero(mask);
+
+    cv::Mat coeffMat = coefficientMatrix(source.size(), mask, indexes, nonzero);
+    cv::Mat solutionVector = solVector(source, dest, mask, false, nonzero);
 
     cv::Mat solR;
     cv::Mat solG;
     cv::Mat solB;
-    
+
     cv::solve(coeffMat, solutionVector.row(2).t(), solR, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
     cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
     cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
@@ -181,8 +177,10 @@ cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv:
 
     cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
 
-    cv::Mat coeffMat = coefficientMatrix(source, dest, mask, indexes);
-    cv::Mat solutionVector = solVector(source, dest, mask, true);
+    int nonzero = cv::countNonZero(mask);
+
+    cv::Mat coeffMat = coefficientMatrix(source.size(), mask, indexes, nonzero);
+    cv::Mat solutionVector = solVector(source, dest, mask, true, nonzero);
 
     cv::Mat solR;
     cv::Mat solG;
@@ -199,7 +197,7 @@ cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv:
 
 //////////////////////////////////////////////////////////////////////
 
-cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::Mat &dest, cv::Mat &indexes, cv::Point p) {
+cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, const cv::Mat &mask, cv::Mat &dest, const cv::Mat &indexes, const cv::Point &p) {
 
 
     r.convertTo(r, CV_8UC1);
@@ -232,8 +230,8 @@ cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, cv::Mat &mask, cv::
     int maxyd = p.x + leny / 2;
 
     CV_Assert(minxd >= 0 && minyd >= 0 && maxxd <= dest.rows && maxyd <= dest.cols);
-    
-    cv::Rect roi = cv::Rect(minyd,minxd,leny,lenx);
+
+    cv::Rect roi = cv::Rect(minyd, minxd, leny, lenx);
 
     cv::split(dest, destChannels);
 

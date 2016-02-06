@@ -61,7 +61,7 @@ LDLIBSOPTIONS=`pkg-config --libs opencv`
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/proyectofinal: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/proyectofinal ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/proyectofinal ${OBJECTFILES} ${LDLIBSOPTIONS} -Wall -Werror -pedantic
 
 ${OBJECTDIR}/functions.o: functions.cpp 
 	${MKDIR} -p ${OBJECTDIR}
