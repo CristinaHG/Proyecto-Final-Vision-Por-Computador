@@ -113,7 +113,7 @@ double guidanceVectMixin(cv::Mat &sourceChannel, cv::Mat &destChannel, int x, in
     return n1 + n2 + n3 + n4;
 }
 
-cv::Mat coefficientMatrix(const cv::Size &sz, const cv::Mat &mask, const cv::Mat &index, int nonz) {
+cv::Mat coefficientMatrix(const cv::Mat &mask, const cv::Mat &index, int nonz) {
 
     int insidePix = 0;
 
@@ -121,8 +121,8 @@ cv::Mat coefficientMatrix(const cv::Size &sz, const cv::Mat &mask, const cv::Mat
     //        cv::SparseMat coeffMatrix2 = cv::SparseMat(2, size, CV_64FC1);
     cv::Mat coeffMatrix = cv::Mat::zeros(nonz, nonz, CV_64FC1);
 
-    for (int i = 1; i < sz.width - 1; i++) {
-        for (int j = 1; j < sz.height - 1; j++) {
+    for (int i = 1; i < mask.rows - 1; i++) {
+        for (int j = 1; j < mask.cols - 1; j++) {
             if (mask.at<uchar>(i, j) != 0) {
                 if (mask.at<uchar>(i - 1, j) != 0) {
                     coeffMatrix.at<double>(insidePix, index.at<double>(i - 1, j)) = -1;
@@ -157,7 +157,7 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv
 
     int nonzero = cv::countNonZero(mask);
 
-    cv::Mat coeffMat = coefficientMatrix(source.size(), mask, indexes, nonzero);
+    cv::Mat coeffMat = coefficientMatrix(mask, indexes, nonzero);
     cv::Mat solutionVector = solVector(source, dest, mask, false, nonzero);
 
     cv::Mat solR;
@@ -179,7 +179,7 @@ cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv:
     
     int nonzero = cv::countNonZero(mask);
 
-    cv::Mat coeffMat = coefficientMatrix(source.size(), mask, indexes, nonzero);
+    cv::Mat coeffMat = coefficientMatrix(mask, indexes, nonzero);
     cv::Mat solutionVector = solVector(source, dest, mask, true, nonzero);
 
     cv::Mat solR;
@@ -282,6 +282,5 @@ cv::Mat getIndexes(cv::Mat &mask, int cols, int rows) {
             }
         }
     }
-
     return indexes;
 }

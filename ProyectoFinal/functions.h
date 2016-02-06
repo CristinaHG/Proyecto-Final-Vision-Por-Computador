@@ -40,7 +40,7 @@ double guidanceVectMixin(cv::Mat &sourceChannel, cv::Mat &destChannel, int x, in
  * @param index
  * @return 
  */
-cv::Mat coefficientMatrix(const cv::Size &sz, const cv::Mat &mask, const cv::Mat &index, int nonz);
+cv::Mat coefficientMatrix(const cv::Mat &mask, const cv::Mat &index, int nonz);
 
 /**
  * 
