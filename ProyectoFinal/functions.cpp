@@ -176,7 +176,7 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv
 cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Point p) {
 
     cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
-
+    
     int nonzero = cv::countNonZero(mask);
 
     cv::Mat coeffMat = coefficientMatrix(source.size(), mask, indexes, nonzero);
