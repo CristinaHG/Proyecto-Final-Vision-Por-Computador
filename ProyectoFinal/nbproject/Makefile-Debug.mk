@@ -43,8 +43,8 @@ OBJECTFILES= \
 CFLAGS=-pedantic -Wextra -Werror
 
 # CC Compiler Flags
-CCFLAGS=-Werror -pedantic -Wall -O3 -std=c++0x -funroll-loops -ftree-vectorize -ftree-vectorizer-verbose=1
-CXXFLAGS=-Werror -pedantic -Wall -O3 -std=c++0x -funroll-loops -ftree-vectorize -ftree-vectorizer-verbose=1
+CCFLAGS=-Werror -pedantic -Wall
+CXXFLAGS=-Werror -pedantic -Wall
 
 # Fortran Compiler Flags
 FFLAGS=

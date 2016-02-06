@@ -164,9 +164,9 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv
     cv::Mat solG;
     cv::Mat solB;
 
-    cv::solve(coeffMat, solutionVector.row(2).t(), solR, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
-    cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
-    cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(2).t(), solR, cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_CHOLESKY);
 
     cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes, p);
 
@@ -186,9 +186,9 @@ cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv:
     cv::Mat solG;
     cv::Mat solB;
 
-    cv::solve(coeffMat, solutionVector.row(2).t(), solR, cv::DECOMP_CHOLESKY);
-    cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_CHOLESKY);
-    cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(2).t(), solR, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
 
     cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes, p);
 

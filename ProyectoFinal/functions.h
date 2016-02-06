@@ -49,7 +49,7 @@ cv::Mat coefficientMatrix(const cv::Size &sz, const cv::Mat &mask, const cv::Mat
  * @param mask
  * @return 
  */
-cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask);
+cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Point p);
 cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Point p);
 
 //---------------------------
