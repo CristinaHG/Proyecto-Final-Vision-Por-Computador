@@ -44,7 +44,7 @@
           <incDir>
             <pElem>/usr/local/include</pElem>
           </incDir>
-          <commandLine>-Werror -pedantic -Wall</commandLine>
+          <commandLine>-Werror -pedantic -Wall -O3 -std=c++0x -funroll-loops -ftree-vectorize -ftree-vectorizer-verbose=1</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
