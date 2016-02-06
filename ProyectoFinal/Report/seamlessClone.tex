@@ -53,7 +53,11 @@
 % Maketitle metadata
 \title{\vspace{-15mm}%
 	\fontsize{24pt}{10pt}\selectfont
+<<<<<<< HEAD
 	\textbf{Fusión de imágenes con Poisson}
+=======
+	\textbf{Long Titles Look More Impressive Than Short Ones}
+>>>>>>> 2fa9106f99c939fe3b3d811b05c8b49a6a25c68d
 	}
 \author{%
 	\large
@@ -72,6 +76,7 @@
 \maketitle
 \thispagestyle{fancy}
 
+<<<<<<< HEAD
 \begin{abstract}
 \noindent Este trabajo corresponde al Proyecto final de la asignatura Visión por Computador y en él se aborda el problema de fusionar dos imágenes
 distintas en una sola, intentando disimular que el resultado es una imágen artificial. Para ello, se desarrollan mecanismos de interpolación
@@ -123,7 +128,15 @@ En forma discretizada: \newline
 \[v_{pq}=\left\{\begin{matrix} f^{*}_{p}-f^{*}_{q} if \mid f^{*}_{p}-f^{*}_{q}\mid > \mid g_{p}-g_{q} \mid \\ g_{p}-g_{q} \end{matrix}\right.\]
 
 que indica que $v_{pq}$ será $g_{p}-g_{q}$ en otro caso(si no se cumple el anterior).
+=======
+\begin{multicols}{2}
 
 \end{multicols}
+
+\bibliography{biblio}{}
+\bibliographystyle{IEEEtran}
+>>>>>>> 2fa9106f99c939fe3b3d811b05c8b49a6a25c68d
+
+\nocite{*}
 
 \end{document}
