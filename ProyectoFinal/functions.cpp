@@ -80,6 +80,7 @@ cv::Mat solVector(const cv::Mat &source, const cv::Mat &dest, const cv::Mat &mas
 }
 
 // eq (11)
+
 double guidanceVect(cv::Mat &sourceChannel, int x, int y) {
 
     double n1 = sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x - 1, y);
@@ -176,8 +177,32 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv
 
 cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv::Point p) {
 
+
+    // TODO Add assert to verify not overflow image
+    int minx = INT_MAX, miny = INT_MAX, maxx = INT_MIN, maxy = INT_MIN;
+    for (int i = 0; i < mask.size().height; i++) {
+        for (int j = 0; j < mask.size().width; j++) {
+            if (mask.at<uchar>(i, j) == 255) {
+                minx = std::min(minx, i);
+                maxx = std::max(maxx, i);
+                miny = std::min(miny, j);
+                maxy = std::max(maxy, j);
+            }
+        }
+    }
+
+    int lenx = maxx - minx;
+    int leny = maxy - miny;
+
+    int minxd = p.y - lenx / 2;
+    int maxxd = p.y + lenx / 2;
+    int minyd = p.x - leny / 2;
+    int maxyd = p.x + leny / 2;
+
+    CV_Assert(minxd >= 0 && minyd >= 0 && maxxd <= dest.rows && maxyd <= dest.cols);
+
     cv::Mat indexes = getIndexes(mask, dest.cols, dest.rows);
-    
+
     int nonzero = cv::countNonZero(mask);
 
     cv::Mat coeffMat = coefficientMatrix(mask, indexes, nonzero);

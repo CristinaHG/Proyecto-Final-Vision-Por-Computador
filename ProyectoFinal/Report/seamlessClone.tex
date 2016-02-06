@@ -53,11 +53,7 @@
 % Maketitle metadata
 \title{\vspace{-15mm}%
 	\fontsize{24pt}{10pt}\selectfont
-<<<<<<< HEAD
 	\textbf{Fusión de imágenes con Poisson}
-=======
-	\textbf{Long Titles Look More Impressive Than Short Ones}
->>>>>>> 2fa9106f99c939fe3b3d811b05c8b49a6a25c68d
 	}
 \author{%
 	\large
@@ -71,12 +67,12 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
 \begin{document}
 
 \maketitle
 \thispagestyle{fancy}
 
-<<<<<<< HEAD
 \begin{abstract}
 \noindent Este trabajo corresponde al Proyecto final de la asignatura Visión por Computador y en él se aborda el problema de fusionar dos imágenes
 distintas en una sola, intentando disimular que el resultado es una imágen artificial. Para ello, se desarrollan mecanismos de interpolación
@@ -84,7 +80,6 @@ basados en resolver ecuaciones de Poisson que nos permiten mezclar imágenes tan
 \end{abstract}
 
 
-\begin{multicols}{1}
 \lettrine[nindent=0em,lines=3]{E}n este proyecto nos centramos en la edición de imágenes a nivel local, ya que nuestro interés se centra en aplicar
 cambios en una región seleccionada de una imágen concreta (imágen de destino) que normalmente implica incorporar la parte seleccionada de otra imágen
 (imágen fuente)  a dicha imágen de destino en una posición indicada a voluntad, haciendo que dicha incorporación parezca lo más natural posible. \newline \newline Para lograr esto, hemos hecho una implementación
@@ -128,14 +123,89 @@ En forma discretizada: \newline
 \[v_{pq}=\left\{\begin{matrix} f^{*}_{p}-f^{*}_{q} if \mid f^{*}_{p}-f^{*}_{q}\mid > \mid g_{p}-g_{q} \mid \\ g_{p}-g_{q} \end{matrix}\right.\]
 
 que indica que $v_{pq}$ será $g_{p}-g_{q}$ en otro caso(si no se cumple el anterior).
-=======
-\begin{multicols}{2}
 
-\end{multicols}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/mix_dest_desert_estrella}
+\caption{}
+\label{fig:1}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/mix_dest_sand_estrella2.jpg}
+\caption{}
+\label{fig:2}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/mix_dest_sand_shell2.jpg}
+\caption{}
+\label{fig:3}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/mix_dest_water_estrella.jpg}
+\caption{}
+\label{fig:4}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.5\textwidth]{./img/mix_Mixing_starSea.png}
+\caption{}
+\label{fig:5}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/mix_dest_desert_nube.jpg}
+\caption{}
+\label{fig:6}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/normal_dest_desert_nube.jpg}
+\caption{}
+\label{fig:7}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/mix_dest_sand_estrella.jpg}
+\caption{}
+\label{fig:8}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/mix_dest_sea_nube.jpg}
+\caption{}
+\label{fig:9}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/mix_etsiit_aleta.jpg}
+\caption{}
+\label{fig:10}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{./img/mix_nubebn1mixed.jpg}
+\caption{}
+\label{fig:11}
+\end{figure}
+
 
 \bibliography{biblio}{}
 \bibliographystyle{IEEEtran}
->>>>>>> 2fa9106f99c939fe3b3d811b05c8b49a6a25c68d
 
 \nocite{*}
 
