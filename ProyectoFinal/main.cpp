@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 
     cv::Mat im1 = cv::imread("imagenes/dest_shell_sand.jpg");
     cv::Mat im2 = cv::imread("imagenes/estrella_src.jpg");
-    cv::Mat mask = cv::imread("imagenes/estrella_mask.jpg", cv::IMREAD_GRAYSCALE);
+    cv::Mat mask = cv::imread("imagenes/estrella_mask2.jpg", cv::IMREAD_GRAYSCALE);
 
     mask = mask > 128;
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 //    cv::Mat result2 = seamlessClonningNormal(im2, im1, mask, cv::Point(350, 248));
 
     cv::imshow("mixed seamless cloning", result2);
-    cv::imwrite("results/mix_dest_sand_estrella.jpg", result2);
+    cv::imwrite("results/mix_.jpg", result2);
     cv::waitKey(0);
 
     return 0;
