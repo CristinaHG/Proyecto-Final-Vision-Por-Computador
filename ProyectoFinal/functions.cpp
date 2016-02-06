@@ -79,6 +79,7 @@ cv::Mat solVector(const cv::Mat &source, const cv::Mat &dest, const cv::Mat &mas
     return solutionV;
 }
 
+// eq (11)
 double guidanceVect(cv::Mat &sourceChannel, int x, int y) {
 
     double n1 = sourceChannel.at<double>(x, y) - sourceChannel.at<double>(x - 1, y);
@@ -164,9 +165,9 @@ cv::Mat seamlessClonningNormal(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv
     cv::Mat solG;
     cv::Mat solB;
 
-    cv::solve(coeffMat, solutionVector.row(2).t(), solR, cv::DECOMP_CHOLESKY);
-    cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_CHOLESKY);
-    cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(2).t(), solB);
+    cv::solve(coeffMat, solutionVector.row(1).t(), solG);
+    cv::solve(coeffMat, solutionVector.row(0).t(), solR);
 
     cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes, p);
 
@@ -186,9 +187,9 @@ cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv:
     cv::Mat solG;
     cv::Mat solB;
 
-    cv::solve(coeffMat, solutionVector.row(2).t(), solR, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
-    cv::solve(coeffMat, solutionVector.row(1).t(), solG, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
-    cv::solve(coeffMat, solutionVector.row(0).t(), solB, cv::DECOMP_LU | cv::DECOMP_CHOLESKY);
+    cv::solve(coeffMat, solutionVector.row(2).t(), solB);
+    cv::solve(coeffMat, solutionVector.row(1).t(), solG);
+    cv::solve(coeffMat, solutionVector.row(0).t(), solR);
 
     cv::Mat result = reconstructImage(solR, solG, solB, mask, dest, indexes, p);
 
@@ -198,7 +199,6 @@ cv::Mat seamlessClonningMixin(cv::Mat &source, cv::Mat &dest, cv::Mat &mask, cv:
 //////////////////////////////////////////////////////////////////////
 
 cv::Mat reconstructImage(cv::Mat &r, cv::Mat &g, cv::Mat &b, const cv::Mat &mask, cv::Mat &dest, const cv::Mat &indexes, const cv::Point &p) {
-
 
     r.convertTo(r, CV_8UC1);
     g.convertTo(g, CV_8UC1);
