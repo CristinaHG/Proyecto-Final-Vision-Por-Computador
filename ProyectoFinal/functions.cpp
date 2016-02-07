@@ -143,6 +143,9 @@ cv::Mat coefficientMatrix(const cv::Mat &mask, const cv::Mat &index, int nonz) {
             }
         }
     }
+    
+    LOG_MESSAGE(coeffMatrix);
+    
     return coeffMatrix;
 }
 
